@@ -18,34 +18,13 @@
           "announcement_text": "🚚 FREE SHIPPING ON ORDERS OVER $50! 🎁"
         }
       },
-      "hero-banner": {
-        "type": "hero-banner",
+      "contact-details": {
+        "type": "contact-details",
         "settings": {
-          "video": "",
-          "title": "Let Your Aura Flow Freely",
-          "subtitle": "Designed for movement, made with intention. Aura Wear brings harmony between comfort and confidence, so you don't just wear style — you live it.",
-          "cta_label": "Shop Collection",
-          "cta_link": "shopify://collections/all",
-          "bg_color": "#ffffff",
-          "text_color": "#333333",
-          "cta_bg": "#cdaa7d",
-          "cta_bg_hover": "#db2955",
-          "cta_text": "#ffffff"
-        }
-      },
-      "featured-collections": {
-        "type": "featured-collections",
-        "settings": {
-          "heading": "Featured Products",
-          "subheading": "Discover our handpicked favorites.",
-          "collection": "featured-collection"
-        }
-      },
-      "offer": {
-        "type": "offer",
-        "settings": {
-          "button_text": "View Offer",
-          "button_link": "/collections/sale"
+          "address": "26°27'17.1\"N 87°33'00.9\"E\nFH32+V4R Dainiya",
+          "phone": "+977 9862262556",
+          "email": "siwakoti.bidur7745@gmail.com",
+          "map_url": "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3572.0306491229217!2d87.54768307613035!3d26.454740976923198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjbCsDI3JzE3LjEiTiA4N8KwMzMnMDAuOSJF!5e0!3m2!1sen!2snp!4v1751810700613!5m2!1sen!2snp"
         }
       },
       "footer": {
