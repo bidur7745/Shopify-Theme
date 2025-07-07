@@ -8,5 +8,13 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "sections": {
+    "login-form": {
+      "type": "login-form",
+      "settings": {}
+    }
+  },
+  "order": [
+    "login-form"
+  ]
 }

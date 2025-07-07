@@ -8,5 +8,13 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "sections": {
+    "register-form": {
+      "type": "register-form",
+      "settings": {}
+    }
+  },
+  "order": [
+    "register-form"
+  ]
 }
