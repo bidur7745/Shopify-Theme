@@ -1,0 +1,137 @@
+<!-- Returns & Exchanges Section -->
+<section class="returns-exchanges">
+  <div class="returns-exchanges__container">
+    <h1 class="returns-exchanges__title">{{ section.settings.title }}</h1>
+    <div class="returns-exchanges__content">
+      {{ section.settings.content }}
+    </div>
+    {% if section.blocks.size > 0 %}
+      <div class="returns-exchanges__blocks">
+        {% for block in section.blocks %}
+          <div class="returns-exchanges__block">
+            <h2 class="returns-exchanges__block-title">{{ block.settings.heading }}</h2>
+            <div class="returns-exchanges__block-content">{{ block.settings.text }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+.returns-exchanges {
+  background: #fff;
+  color: #222;
+  padding: 3rem 0;
+}
+.returns-exchanges__container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.returns-exchanges__title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #1D1D1F;
+  text-align: center;
+}
+.returns-exchanges__content {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  color: #444;
+}
+.returns-exchanges__blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.returns-exchanges__block-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #CDAA7D;
+}
+.returns-exchanges__block-content {
+  color: #444;
+  line-height: 1.6;
+}
+@media screen and (max-width: 600px) {
+  .returns-exchanges__container {
+    padding: 0 0.5rem;
+  }
+  .returns-exchanges__title {
+    font-size: 1.5rem;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Returns & Exchanges",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Title",
+      "default": "Returns & Exchanges"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Intro Content",
+      "default": "<p>We want you to love your purchase! If you need to return or exchange an item, please review our policy below.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "policy",
+      "name": "Policy Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Return Policy"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Returns are accepted within 30 days of delivery. Items must be unworn, unwashed, and in original packaging.</p>"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Question",
+          "default": "How do I start a return?"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Answer",
+          "default": "<p>Contact our support team at support@example.com with your order number to initiate a return.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Default",
+      "category": "Pages",
+      "blocks": [
+        { "type": "policy" },
+        { "type": "faq" }
+      ]
+    }
+  ]
+}
+{% endschema %} 
