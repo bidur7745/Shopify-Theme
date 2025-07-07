@@ -81,43 +81,79 @@
       "type": "richtext",
       "id": "content",
       "label": "Intro Content",
-      "default": "<p>We want you to love your purchase! If you need to return or exchange an item, please review our policy below.</p>"
+      "default": "<p>At Aura Wear, we want you to love your purchase. But if something isn't quite right, we've got your back. Please read our return and exchange guidelines below.</p>"
     }
   ],
   "blocks": [
     {
-      "type": "policy",
-      "name": "Policy Block",
+      "type": "returns",
+      "name": "Returns",
       "settings": [
         {
           "type": "text",
           "id": "heading",
           "label": "Heading",
-          "default": "Return Policy"
+          "default": "<i class='fas fa-undo-alt'></i> Returns"
         },
         {
           "type": "richtext",
           "id": "text",
           "label": "Text",
-          "default": "<p>Returns are accepted within 30 days of delivery. Items must be unworn, unwashed, and in original packaging.</p>"
+          "default": "<ul><li><strong>Return Window:</strong> You can request a return within 7–14 days of receiving your order.</li><li><strong>Eligibility:</strong><ul><li>Items must be unused, unwashed, and in original packaging with tags attached.</li><li>Items marked as final sale or discounted beyond 50% are not eligible for return.</li></ul></li><li><strong>How to Request a Return:</strong><ul><li>Email us at <a href='mailto:support@aurawear.com'>support@aurawear.com</a> with your order number and reason for return.</li><li>We'll send you a return label (if eligible).</li><li>Pack the item and drop it at your nearest post office.</li></ul></li></ul>"
         }
       ]
     },
     {
-      "type": "faq",
-      "name": "FAQ Block",
+      "type": "exchanges",
+      "name": "Exchanges",
       "settings": [
         {
           "type": "text",
           "id": "heading",
-          "label": "Question",
-          "default": "How do I start a return?"
+          "label": "Heading",
+          "default": "<i class='fas fa-exchange-alt'></i> Exchanges"
         },
         {
           "type": "richtext",
           "id": "text",
-          "label": "Answer",
-          "default": "<p>Contact our support team at support@example.com with your order number to initiate a return.</p>"
+          "label": "Text",
+          "default": "<ul><li><strong>Size or Color Issue?</strong><ul><li>We offer one-time free exchanges for size or color.</li><li>Email us within 7 days of delivery, and we'll help you exchange your item (subject to availability).</li></ul></li><li><strong>Exchange Conditions:</strong> Same as return conditions — item must be unused and in sellable condition.</li></ul>"
+        }
+      ]
+    },
+    {
+      "type": "refunds",
+      "name": "Refunds",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<i class='fas fa-money-bill-wave'></i> Refunds"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<ul><li>Refunds will be processed to your original payment method within 5–7 business days after we receive and inspect the returned item.</li><li>You will receive an email confirmation when your refund is initiated.</li></ul>"
+        }
+      ]
+    },
+    {
+      "type": "shipping_costs",
+      "name": "Shipping Costs",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<i class='fas fa-shipping-fast'></i> Shipping Costs"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<ul><li>Return shipping is free for first-time returns.</li><li>For second or multiple returns/exchanges, the customer may be responsible for return shipping costs.</li></ul>"
         }
       ]
     }
@@ -128,8 +164,10 @@
       "name": "Default",
       "category": "Pages",
       "blocks": [
-        { "type": "policy" },
-        { "type": "faq" }
+        { "type": "returns" },
+        { "type": "exchanges" },
+        { "type": "refunds" },
+        { "type": "shipping_costs" }
       ]
     }
   ]
