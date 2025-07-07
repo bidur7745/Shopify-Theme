@@ -51,6 +51,25 @@
       "footer": {
         "type": "footer",
         "settings": {}
+      },
+      "returns-exchanges": {
+        "type": "returns-exchanges",
+        "blocks": {
+          "policy_4zh77f": {
+            "type": "policy",
+            "settings": {
+              "heading": "Return Policy",
+              "text": "<p>Returns are accepted within 30 days of delivery. Items must be unworn, unwashed, and in original packaging.</p>"
+            }
+          }
+        },
+        "block_order": [
+          "policy_4zh77f"
+        ],
+        "settings": {
+          "title": "Returns & Exchanges",
+          "content": "<p>We want you to love your purchase! If you need to return or exchange an item, please review our policy below.</p>"
+        }
       }
     },
     "content_for_index": []
