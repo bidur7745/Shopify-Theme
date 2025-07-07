@@ -8,5 +8,113 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "brand_name": "Aura Wear",
+          "show_announcement": true,
+          "announcement_text": "🚚 FREE SHIPPING ON ORDERS OVER $50! 🎁"
+        }
+      },
+      "returns-exchanges": {
+        "type": "returns-exchanges",
+        "settings": {
+          "title": "Returns & Exchanges",
+          "content": "<p>At Aura Wear, we want you to love your purchase. But if something isn't quite right, we've got your back. Please read our return and exchange guidelines below.</p>"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      },
+      "size-guide": {
+        "type": "size-guide",
+        "settings": {
+          "title": "Size Guide",
+          "intro": "At Aura Wear, we know the importance of the perfect fit. Use our comprehensive size guide below to help you find the right size for men's and women's apparel, plus a global size conversion chart for easy reference.",
+          "womens_chart": "XS,31–32,24–25,33–34\nS,33–34,26–27,35–36\nM,35–36,28–29,37–38\nL,37–39,30–32,39–41\nXL,40–42,33–35,42–44",
+          "mens_chart": "S,35–37,29–31,35–37\nM,38–40,32–34,38–40\nL,41–43,35–37,41–43\nXL,44–46,38–40,44–46\nXXL,47–49,41–43,47–49",
+          "international_chart": "2,6,34,6\n4,8,36,8\n6,10,38,10\n8,12,40,12\n10,14,42,14"
+        }
+      },
+      "faq": {
+        "type": "faq",
+        "blocks": {
+          "returns_exchanges_wBJX8q": {
+            "type": "returns_exchanges",
+            "settings": {
+              "icon": "<i class=\"fas fa-box\"></i>",
+              "heading": "Returns & Exchanges",
+              "qna": "Q: What is your return policy? A: We accept returns within 7 days of delivery. Items must be unworn, unwashed, and in original packaging.\nQ: How can I start a return or exchange? A: Visit our Returns & Exchange page and fill out the return form. We'll guide you through the rest.\nQ: Are returns free? A: Return shipping costs are covered by the customer unless the product arrived damaged or incorrect."
+            }
+          },
+          "orders_shipping_ztLLED": {
+            "type": "orders_shipping",
+            "settings": {
+              "icon": "<i class=\"fas fa-shopping-bag\"></i>",
+              "heading": "Orders & Shipping",
+              "qna": "Q: How long does it take to process my order? A: Orders are typically processed within 1–2 business days. You'll receive an email confirmation once your order is on the way.\nQ: How long is the delivery time? A: Delivery within Nepal takes 2–5 business days. For international orders, it may take 7–14 business days, depending on your location.\nQ: How much is the shipping fee? A: Shipping is free on all domestic orders over NPR 3,000. For other rates, please refer to our Shipping Policy."
+            }
+          },
+          "order_tracking_MUVaEX": {
+            "type": "order_tracking",
+            "settings": {
+              "icon": "<i class=\"fas fa-search\"></i>",
+              "heading": "Order Tracking",
+              "qna": "Q: How do I track my order? A: Once your order ships, you'll receive a tracking link via email. You can also track it via your My Account dashboard.\nQ: I haven't received my order. What should I do? A: First, check the tracking link. If it's delayed or marked as delivered but you didn't receive it, contact our support at support@aurawear.com."
+            }
+          },
+          "payments_Ayi7E6": {
+            "type": "payments",
+            "settings": {
+              "icon": "<i class=\"fas fa-credit-card\"></i>",
+              "heading": "Payments",
+              "qna": "Q: What payment methods do you accept? A: We accept Visa, MasterCard, Khalti, eSewa, and Cash on Delivery (COD) for eligible regions.\nQ: Is it safe to shop on your site? A: Absolutely. We use SSL encryption and secure checkout gateways to protect your data."
+            }
+          },
+          "sizing_fit_FmWQi4": {
+            "type": "sizing_fit",
+            "settings": {
+              "icon": "<i class=\"fas fa-ruler\"></i>",
+              "heading": "Sizing & Fit",
+              "qna": "Q: How do I know which size to choose? A: Check our Size Guide for measurements and international conversions.\nQ: What if I ordered the wrong size? A: We're happy to help with an exchange. Visit our Returns & Exchanges page or reach out to support."
+            }
+          },
+          "account_support_bPhRPx": {
+            "type": "account_support",
+            "settings": {
+              "icon": "<i class=\"fas fa-user\"></i>",
+              "heading": "Account & Support",
+              "qna": "Q: Do I need an account to order? A: No, you can checkout as a guest. But creating an account makes it easier to track orders and manage returns.\nQ: How can I contact support? A: Email us anytime at support@aurawear.com — we typically respond within 24 hours on business days."
+            }
+          },
+          "product_stock_8q9jcG": {
+            "type": "product_stock",
+            "settings": {
+              "icon": "<i class=\"fas fa-tshirt\"></i>",
+              "heading": "Product & Stock",
+              "qna": "Q: Will sold-out items be restocked? A: Some popular items are restocked. Follow us on Instagram and subscribe to our newsletter for updates.\nQ: Where are your clothes made? A: Our products are designed in Nepal and ethically sourced from trusted global partners."
+            }
+          }
+        },
+        "block_order": [
+          "returns_exchanges_wBJX8q",
+          "orders_shipping_ztLLED",
+          "order_tracking_MUVaEX",
+          "payments_Ayi7E6",
+          "sizing_fit_FmWQi4",
+          "account_support_bPhRPx",
+          "product_stock_8q9jcG"
+        ],
+        "settings": {
+          "title": "Frequently Asked Questions (FAQ)",
+          "intro": "Welcome to Aura Wear's Help Center. We've compiled answers to the most common questions to help you shop with confidence.",
+          "contact": "We're happy to help!\n📧 Email us at support@aurawear.com or visit our Contact page."
+        }
+      }
+    },
+    "content_for_index": []
+  }
 }
