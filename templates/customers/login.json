@@ -9,12 +9,20 @@
  */
 {
   "sections": {
-    "login-form": {
-      "type": "login-form",
-      "settings": {}
-    }
+    "header": { "type": "header", "settings": {} },
+    "main": {
+      "type": "main-login",
+      "settings": {
+        "enable_shop_login_button": "true",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "footer": { "type": "footer", "settings": {} }
   },
   "order": [
-    "login-form"
+    "header",
+    "main",
+    "footer"
   ]
 }
