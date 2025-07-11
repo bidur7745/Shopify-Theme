@@ -95,6 +95,7 @@
 }
 .header__nav-link:hover {
   color: var(--color-highlight);
+  border-radius: 10px;
 }
 .header__nav-link::after {
   content: '';
@@ -259,6 +260,7 @@
   background: var(--color-accent);
   color: var(--color-primary);
   transform: translateX(5px);
+  border-radius: 10px;
 }
 .header__dropdown-item--submenu {
   position: relative;
