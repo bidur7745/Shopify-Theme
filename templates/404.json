@@ -8,5 +8,23 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "sections": {
+    "main": {
+      "type": "404-section",
+      "settings": {}
+    },
+    "header": {
+      "type": "header",
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header",
+    "main",
+    "footer"
+  ]
 }
