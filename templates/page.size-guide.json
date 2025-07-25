@@ -1,12 +1,8 @@
 {
   "sections": {
     "header": { "type": "header", "settings": {} },
-    "main": { "type": "search" },
+    "size-guide": { "type": "size-guide", "settings": {} },
     "footer": { "type": "footer", "settings": {} }
   },
-  "order": [
-    "header",
-    "main",
-    "footer"
-  ]
+  "order": ["header", "size-guide", "footer"]
 } 

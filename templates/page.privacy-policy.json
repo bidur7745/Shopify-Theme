@@ -1,12 +1,8 @@
 {
   "sections": {
     "header": { "type": "header", "settings": {} },
-    "main": { "type": "search" },
+    "policy-privacy": { "type": "policy-privacy", "settings": {} },
     "footer": { "type": "footer", "settings": {} }
   },
-  "order": [
-    "header",
-    "main",
-    "footer"
-  ]
+  "order": ["header", "policy-privacy", "footer"]
 } 
