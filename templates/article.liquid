@@ -1,0 +1,79 @@
+{% section 'header' %}
+<link rel="stylesheet" href="{{ 'article.css' | asset_url }}">
+
+<main class="article-main">
+  <article class="article-content">
+    <h1 class="article-title">{{ article.title }}</h1>
+    <div class="article-meta">
+      <span class="article-date">{{ article.published_at | date: '%B %d, %Y' }}</span>
+      <span class="article-author">by {{ article.author }}</span>
+    </div>
+    {% if article.image %}
+      <img src="{{ article.image | img_url: '800x' }}" alt="{{ article.title | escape }}" class="article-image" />
+    {% else %}
+      <img src="{{ 'placeholder.png' | asset_url }}" alt="No image" class="article-image" />
+    {% endif %}
+    <div class="article-body">
+      {{ article.content }}
+    </div>
+    {% if article.tags.size > 0 %}
+      <div class="article-tags">
+        <span>Tags:</span>
+        {% for tag in article.tags %}
+          <span class="article-tag">{{ tag }}</span>{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    <!-- Like Button -->
+    <div class="article-likes">
+      <button id="likeBtn" class="like-btn">&#x1F44D; Like <span id="likeCount">0</span></button>
+    </div>
+    <!-- Comments Section -->
+    <div class="article-comments">
+      <h2 class="comments-title">Comments</h2>
+      {% if article.comments_count > 0 %}
+        <ul class="comments-list">
+          {% for comment in article.comments %}
+            <li class="comment">
+              <div class="comment-author">{{ comment.author }}</div>
+              <div class="comment-date">{{ comment.created_at | date: '%B %d, %Y at %I:%M %p' }}</div>
+              <div class="comment-content">{{ comment.content }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No comments yet. Be the first to comment!</p>
+      {% endif %}
+      {% form 'new_comment', article %}
+        <div class="comment-form">
+          <input type="text" name="comment[author]" placeholder="Your name" required class="comment-input" />
+          <input type="email" name="comment[email]" placeholder="Your email" required class="comment-input" />
+          <textarea name="comment[body]" placeholder="Your comment" required class="comment-textarea"></textarea>
+          <button type="submit" class="comment-submit">Submit</button>
+        </div>
+        {% if form.errors %}
+          <div class="comment-error">{{ form.errors | default_errors }}</div>
+        {% endif %}
+        {% if form.posted_successfully? %}
+          <div class="comment-success">Thank you for your comment! It will appear once approved.</div>
+        {% endif %}
+      {% endform %}
+    </div>
+  </article>
+</main>
+
+<script>
+// Simple Like Button (front-end only, not persistent)
+document.addEventListener('DOMContentLoaded', function() {
+  var likeBtn = document.getElementById('likeBtn');
+  var likeCount = document.getElementById('likeCount');
+  var count = 0;
+  likeBtn.addEventListener('click', function() {
+    count++;
+    likeCount.textContent = count;
+    likeBtn.classList.add('liked');
+  });
+});
+</script>
+
+{% section 'footer' %} 
