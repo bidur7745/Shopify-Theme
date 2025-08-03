@@ -11,23 +11,49 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "brand_name": "Aura Wear",
+        "show_announcement": true,
+        "announcement_text": "🚚 FREE SHIPPING ON ORDERS OVER $50! 🎁"
+      }
     },
     "hero-banner": {
       "type": "hero-banner",
-      "settings": {}
+      "settings": {
+        "video": "",
+        "title": "Let Your Aura Flow Freely",
+        "subtitle": "Designed for movement, made with intention. Aura Wear brings harmony between comfort and confidence, so you don't just wear style — you live it.",
+        "cta_label": "Shop Collection",
+        "cta_link": "shopify://collections/all",
+        "bg_color": "#ffffff",
+        "text_color": "#333333",
+        "cta_bg": "#cdaa7d",
+        "cta_bg_hover": "#db2955",
+        "cta_text": "#ffffff"
+      }
     },
     "featured-collections": {
       "type": "featured-collections",
-      "settings": {}
+      "settings": {
+        "heading": "Featured Products",
+        "subheading": "Discover our handpicked favorites.",
+        "collection": "featured-collection"
+      }
     },
     "offer": {
       "type": "offer",
-      "settings": {}
+      "settings": {
+        "button_text": "View Offer",
+        "button_link": "/collections/sale"
+      }
     },
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "brand_name": "Aura Wear",
+        "tagline": "Let Your Aura Flow Freely",
+        "description": "Designed for movement, made with intention. Aura Wear brings harmony between comfort and confidence."
+      }
     }
   },
   "order": [
@@ -37,4 +63,4 @@
     "offer",
     "footer"
   ]
-} 
+}
