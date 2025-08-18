@@ -1,0 +1,191 @@
+{% comment %}
+  Collections page template: lists all products with name, image, price, and add-to-cart button.
+  Uses the same header and footer for consistency.
+{% endcomment %}
+
+
+<!-- Link to collection styles -->
+<link rel="stylesheet" href="{{ 'collection.css' | asset_url }}">
+
+<main class="collections-main">
+  <div class="collections-header">
+    <h1 class="collections-title">All Products</h1>
+    <button class="mobile-filter-toggle" id="mobileFilterToggle" aria-label="Toggle filters">
+      <i class="fa-solid fa-filter"></i>
+      Filters
+    </button>
+  </div>
+  
+  <div class="collections-layout">
+    <aside class="collections-sidebar" id="collectionsSidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-heading">Filter Products</div>
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close filters">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      
+      <!-- Gender Filter Buttons -->
+      <div class="filter-group gender-filter-group">
+        <div class="filter-group-title">Gender</div>
+        <div class="gender-filter-buttons">
+          <a href="/collections/kids" class="gender-btn{% if collection.handle == 'kids' %} active-gender{% endif %}">Kids</a>
+          <a href="/collections/male" class="gender-btn{% if collection.handle == 'male' %} active-gender{% endif %}">Male</a>
+          <a href="/collections/female" class="gender-btn{% if collection.handle == 'female' %} active-gender{% endif %}">Female</a>
+        </div>
+      </div>
+      
+      <!-- Sort Buttons -->
+      <div class="filter-group sort-btn-group">
+        <div class="filter-group-title">Sort By</div>
+        <div class="sort-btns">
+          <a href="?sort_by=best-selling" class="sort-btn{% if collection.sort_by == 'best-selling' %} active-sort{% endif %}">Best Selling</a>
+          <a href="?sort_by=featured" class="sort-btn{% if collection.sort_by == 'featured' %} active-sort{% endif %}">Featured</a>
+        </div>
+        <div class="sort-dropdown-group">
+          <select class="styled-input sort-dropdown" onchange="if(this.value) window.location.href=this.value;">
+            <option value="">Other Sort Options</option>
+            <option value="?sort_by=price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Price: High to Low</option>
+            <option value="?sort_by=price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Price: Low to High</option>
+            <option value="?sort_by=created-descending" {% if collection.sort_by == 'created-descending' %}selected{% endif %}>New to Old</option>
+            <option value="?sort_by=created-ascending" {% if collection.sort_by == 'created-ascending' %}selected{% endif %}>Old to New</option>
+          </select>
+        </div>
+      </div>
+      
+      <form id="CollectionFiltersForm" method="get" action="">
+        <div id="active-filters" class="active-filters">
+          {% for filter in collection.filters %}
+            {% for value in filter.active_values %}
+              <span class="active-filter-tag">
+                {{ value.label }}
+                <a href="{{ value.url_to_remove }}" class="remove-filter" title="Remove filter">&times;</a>
+              </span>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        
+        {% for filter in collection.filters %}
+          {% if filter.label == 'Availability' %}
+            {% continue %}
+          {% endif %}
+          <div class="filter-group collapsible{% if filter.type == 'price_range' %} price-filter-group{% endif %}" data-collapsible>
+            <button type="button" class="filter-group-title collapsible-toggle" aria-expanded="true">{{ filter.label }}</button>
+            <div class="filter-group-options collapsible-content">
+              {% case filter.type %}
+                {% when 'list' %}
+                  {% for value in filter.values %}
+                    <label class="filter-option">
+                      <input type="checkbox" name="filter.v.{{ value.id }}" value="1" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %} class="styled-checkbox">
+                      <span>{{ value.label }} ({{ value.count }})</span>
+                    </label>
+                  {% endfor %}
+                {% when 'price_range' %}
+                  <div class="filter-price-range">
+                    <input type="number" name="filter.v.price.gte" min="{{ filter.min_value }}" max="{{ filter.max_value }}" value="{{ filter.min_value.value | default: '' }}" placeholder="Min" class="filter-price-input styled-input">
+                    <span>–</span>
+                    <input type="number" name="filter.v.price.lte" min="{{ filter.min_value }}" max="{{ filter.max_value }}" value="{{ filter.max_value.value | default: '' }}" placeholder="Max" class="filter-price-input styled-input">
+                  </div>
+              {% endcase %}
+            </div>
+          </div>
+        {% endfor %}
+        
+        <div class="clear-filter-area">
+          <button type="submit" class="filter-apply-btn">Apply Filters</button>
+          {% assign active_filters = false %}
+          {% for filter in collection.filters %}
+            {% if filter.active_values.size > 0 %}
+              {% assign active_filters = true %}
+            {% endif %}
+          {% endfor %}
+          {% if active_filters %}
+            <a href="{{ collection.url }}" class="clear-all-filters">Clear All</a>
+          {% endif %}
+        </div>
+      </form>
+    </aside>
+    
+    <div class="collections-content">
+      <div class="collections-grid">
+        {% for product in collection.products %}
+          <div class="collections-product-card">
+            <button class="wishlist-heart-btn" data-handle="{{ product.handle }}" aria-label="Add to Wishlist" title="Add to Wishlist">
+              <span class="wishlist-heart-icon">&#9825;</span>
+            </button>
+            <a href="{{ product.url }}" class="collections-product-image-link">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | img_url: '500x500' }}" alt="{{ product.title | escape }}" class="collections-product-image" />
+              {% endif %}
+            </a>
+            <div class="collections-product-info">
+              <a href="{{ product.url }}" class="collections-product-title">{{ product.title }}</a>
+              <div class="collections-product-price">
+                {% if product.compare_at_price > product.price %}
+                  <span class="compare-at-price" style="text-decoration:line-through;color:#b0b0b0;margin-right:0.5em;">{{ product.compare_at_price | money }}</span>
+                {% endif %}
+                <span class="actual-price">{{ product.price | money }}</span>
+              </div>
+              <form action="/cart/add" method="post" enctype="multipart/form-data" class="collections-product-form">
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                <button type="submit" class="collections-add-to-cart">Add to Cart</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Mobile sidebar overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+
+<script>
+// Mobile sidebar toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+  const sidebar = document.getElementById('collectionsSidebar');
+  const sidebarClose = document.getElementById('sidebarClose');
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
+  
+  function openSidebar() {
+    sidebar.classList.add('active');
+    sidebarOverlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeSidebar() {
+    sidebar.classList.remove('active');
+    sidebarOverlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  
+  if (mobileFilterToggle) {
+    mobileFilterToggle.addEventListener('click', openSidebar);
+  }
+  
+  if (sidebarClose) {
+    sidebarClose.addEventListener('click', closeSidebar);
+  }
+  
+  if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', closeSidebar);
+  }
+  
+  // Close sidebar on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+      closeSidebar();
+    }
+  });
+  
+  // Close sidebar on window resize if screen becomes large
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768 && sidebar.classList.contains('active')) {
+      closeSidebar();
+    }
+  });
+});
+</script> 
