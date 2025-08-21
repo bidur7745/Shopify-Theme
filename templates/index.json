@@ -44,9 +44,9 @@
     "featured-collections": {
       "type": "featured-collections",
       "settings": {
-        "heading": "Content Heading",
+        "heading": "Featured Collection",
         "subheading": "<p>Browse through our handpicked selections tailored to fit every style, time, and vibe. Whether you're seeking a rising standout, we've got something for everyone.</p>",
-        "collection": ""
+        "collection": "featured-collection"
       }
     },
     "offer": {
