@@ -11,28 +11,57 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "brand_name": "GoldTree Fashion",
+        "show_announcement": true,
+        "announcement_text": "🚚 FREE SHIPPING ON ORDERS OVER $50! 🎁"
+      }
     },
     "hero-banner": {
       "type": "hero-banner",
-      "settings": {}
+      "settings": {
+        "title": "Elegance<br>Redefined",
+        "subtitle": "Luxury Fashion",
+        "description": "Discover our exclusive collection where timeless sophistication meets contemporary design. Crafted for those who appreciate the finer details in fashion.",
+        "cta_label": "Shop Collection",
+        "cta_link": "shopify://collections/all",
+        "image1_alt": "Look 1",
+        "image2_alt": "Look 2",
+        "image3_alt": "Look 3",
+        "image4_alt": "Look 4"
+      }
     },
     "browse-tshirt": {
       "type": "browse-tshirt",
-      "settings": {}
+      "settings": {
+        "spline_url": "",
+        "heading": "Browse T‑Shirts",
+        "subheading": "<p>Dive into our latest T‑shirt drops and explore details up close with an interactive 3D view.</p>",
+        "button_label": "Explore"
+      }
     },
     "featured-collections": {
       "type": "featured-collections",
-      "settings": {}
+      "settings": {
+        "heading": "Content Heading",
+        "subheading": "<p>Browse through our handpicked selections tailored to fit every style, time, and vibe. Whether you're seeking a rising standout, we've got something for everyone.</p>",
+        "collection": "featured-collection"
+      }
     },
     "offer": {
       "type": "offer",
-      "settings": {}
+      "settings": {
+        "button_text": "View Offer",
+        "button_link": "/collections/sale"
+      }
     },
-    
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "brand_name": "GoldTree Fashion",
+        "tagline": "Let Your Aura Flow Freely",
+        "description": "Designed for movement, made with intention. GoldTree Fashion brings harmony between comfort and confidence."
+      }
     }
   },
   "order": [
@@ -43,4 +72,4 @@
     "offer",
     "footer"
   ]
-} 
+}
