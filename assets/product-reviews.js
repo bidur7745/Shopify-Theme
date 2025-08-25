@@ -239,105 +239,130 @@ function getSelectedRating() {
   return filledStars.length;
 }
 
-function addReviewToPage(review) {
-  const reviewsList = document.getElementById('reviews-list');
-  
-  const reviewHTML = `
-    <div class="review-item" data-rating="${review.rating}" data-date="${new Date().toISOString().split('T')[0]}">
-      <div class="review-header">
-        <div class="reviewer-info">
-          <div class="reviewer-avatar">
-            <i class="fas fa-user"></i>
-          </div>
-          <div class="reviewer-details">
-            <h4 class="reviewer-name">${review.reviewer}</h4>
-            <div class="review-rating">
-              ${generateStars(review.rating)}
-            </div>
-          </div>
-        </div>
-        <div class="review-date">${review.date}</div>
-      </div>
-      <h5 class="review-title">${review.title}</h5>
-      <p class="review-content">${review.content}</p>
-      <div class="review-helpful">
-        <button class="helpful-btn" onclick="markHelpful(this)">
-          <i class="fas fa-thumbs-up"></i>
-          Helpful (0)
-        </button>
-      </div>
-    </div>
-  `;
-  
-  // Add to the beginning of the list
-  reviewsList.insertAdjacentHTML('afterbegin', reviewHTML);
-  
-  // Update review count
-  updateReviewCount();
-}
+ function addReviewToPage(review) {
+   const reviewsList = document.getElementById('reviews-list');
+   const noReviewsMessage = document.getElementById('no-reviews-message');
+   
+   // Remove "no reviews" message if it exists
+   if (noReviewsMessage) {
+     noReviewsMessage.remove();
+   }
+   
+   const reviewHTML = `
+     <div class="review-item" data-rating="${review.rating}" data-date="${new Date().toISOString().split('T')[0]}">
+       <div class="review-header">
+         <div class="reviewer-info">
+           <div class="reviewer-avatar">
+             <i class="fas fa-user"></i>
+           </div>
+           <div class="reviewer-details">
+             <h4 class="reviewer-name">${review.reviewer}</h4>
+             <div class="review-rating">
+               ${generateStars(review.rating)}
+             </div>
+           </div>
+         </div>
+         <div class="review-date">${review.date}</div>
+       </div>
+       <h5 class="review-title">${review.title}</h5>
+       <p class="review-content">${review.content}</p>
+       <div class="review-helpful">
+         <button class="helpful-btn" onclick="markHelpful(this)">
+           <i class="fas fa-thumbs-up"></i>
+           Helpful (0)
+         </button>
+       </div>
+     </div>
+   `;
+   
+   // Add to the beginning of the list
+   reviewsList.insertAdjacentHTML('afterbegin', reviewHTML);
+   
+   // Show pagination section
+   const paginationSection = document.getElementById('reviews-pagination');
+   if (paginationSection) {
+     paginationSection.style.display = 'block';
+   }
+   
+   // Update review count
+   updateReviewCount();
+ }
 
 function generateStars(rating) {
   let stars = '';
   for (let i = 1; i <= 5; i++) {
     if (i <= rating) {
-      stars += '<span class="star filled">★</span>';
+      stars += '<i class="fas fa-star star filled"></i>';
     } else {
-      stars += '<span class="star">☆</span>';
+      stars += '<i class="far fa-star star"></i>';
     }
   }
   return stars;
 }
 
-function updateReviewCount() {
-  const totalReviews = document.querySelector('.total-reviews');
-  const currentCount = parseInt(totalReviews.textContent.match(/\d+/)[0]);
-  totalReviews.textContent = `${currentCount + 1} reviews`;
-}
+ function updateReviewCount() {
+   const totalReviews = document.querySelector('.total-reviews');
+   if (totalReviews) {
+     const currentCount = parseInt(totalReviews.textContent.match(/\d+/)[0]);
+     totalReviews.textContent = `${currentCount + 1} reviews`;
+   }
+ }
 
-// Filtering and Sorting
-function filterReviews(rating) {
-  const reviews = document.querySelectorAll('.review-item');
-  
-  reviews.forEach(review => {
-    const reviewRating = parseInt(review.dataset.rating);
-    
-    if (rating === 'all' || reviewRating === parseInt(rating)) {
-      review.style.display = 'block';
-    } else {
-      review.style.display = 'none';
-    }
-  });
-}
+ // Filtering and Sorting
+ function filterReviews(rating) {
+   const reviews = document.querySelectorAll('.review-item');
+   const noReviewsMessage = document.getElementById('no-reviews-message');
+   
+   if (reviews.length === 0) {
+     // No reviews to filter
+     return;
+   }
+   
+   reviews.forEach(review => {
+     const reviewRating = parseInt(review.dataset.rating);
+     
+     if (rating === 'all' || reviewRating === parseInt(rating)) {
+       review.style.display = 'block';
+     } else {
+       review.style.display = 'none';
+     }
+   });
+ }
 
-function sortReviews(sortBy) {
-  const reviewsList = document.getElementById('reviews-list');
-  const reviews = Array.from(reviewsList.querySelectorAll('.review-item'));
-  
-  reviews.sort((a, b) => {
-    const ratingA = parseInt(a.dataset.rating);
-    const ratingB = parseInt(b.dataset.rating);
-    const dateA = new Date(a.dataset.date);
-    const dateB = new Date(b.dataset.date);
-    
-    switch (sortBy) {
-      case 'newest':
-        return dateB - dateA;
-      case 'oldest':
-        return dateA - dateB;
-      case 'highest':
-        return ratingB - ratingA;
-      case 'lowest':
-        return ratingA - ratingB;
-      default:
-        return 0;
-    }
-  });
-  
-  // Re-append sorted reviews
-  reviews.forEach(review => {
-    reviewsList.appendChild(review);
-  });
-}
+ function sortReviews(sortBy) {
+   const reviewsList = document.getElementById('reviews-list');
+   const reviews = Array.from(reviewsList.querySelectorAll('.review-item'));
+   
+   if (reviews.length === 0) {
+     // No reviews to sort
+     return;
+   }
+   
+   reviews.sort((a, b) => {
+     const ratingA = parseInt(a.dataset.rating);
+     const ratingB = parseInt(b.dataset.rating);
+     const dateA = new Date(a.dataset.date);
+     const dateB = new Date(b.dataset.date);
+     
+     switch (sortBy) {
+       case 'newest':
+         return dateB - dateA;
+       case 'oldest':
+         return dateA - dateB;
+       case 'highest':
+         return ratingB - ratingA;
+       case 'lowest':
+         return ratingA - ratingB;
+       default:
+         return 0;
+     }
+   });
+   
+   // Re-append sorted reviews
+   reviews.forEach(review => {
+     reviewsList.appendChild(review);
+   });
+ }
 
 // Helpful Button Functionality
 function initializeHelpfulButtons() {
@@ -369,42 +394,22 @@ function markHelpful(button) {
   }, 200);
 }
 
-// Load More Reviews
-function loadMoreReviews() {
-  const paginationBtn = document.querySelector('.pagination-btn');
-  paginationBtn.textContent = 'Loading...';
-  paginationBtn.disabled = true;
-  
-  // Simulate loading more reviews
-  setTimeout(() => {
-    // Add sample reviews (in real implementation, fetch from API)
-    const sampleReviews = [
-      {
-        rating: 5,
-        title: "Amazing quality!",
-        content: "This product exceeded my expectations. The material is premium and the fit is perfect.",
-        reviewer: "Jessica K.",
-        date: "January 3, 2024"
-      },
-      {
-        rating: 4,
-        title: "Good value for money",
-        content: "Nice product, good quality. Shipping was fast and the packaging was excellent.",
-        reviewer: "David R.",
-        date: "January 1, 2024"
-      }
-    ];
-    
-    sampleReviews.forEach(review => {
-      addReviewToPage(review);
-    });
-    
-    paginationBtn.textContent = 'Load More Reviews';
-    paginationBtn.disabled = false;
-    
-    showNotification('More reviews loaded!', 'success');
-  }, 1000);
-}
+ // Load More Reviews
+ function loadMoreReviews() {
+   const paginationBtn = document.querySelector('.pagination-btn');
+   paginationBtn.textContent = 'Loading...';
+   paginationBtn.disabled = true;
+   
+   // In a real implementation, this would fetch more reviews from your backend API
+   // For now, we'll show a message that no more reviews are available
+   setTimeout(() => {
+     paginationBtn.textContent = 'No More Reviews';
+     paginationBtn.disabled = true;
+     paginationBtn.style.opacity = '0.6';
+     
+     showNotification('No more reviews available', 'info');
+   }, 1000);
+ }
 
 // Utility Functions
 function resetReviewForm() {

@@ -70,11 +70,20 @@
   opacity: 0.7;
 }
 
-.total-reviews {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0;
+/* Font Awesome star icons */
+.fas.fa-star.star {
+  color: #FFD700;
 }
+
+.far.fa-star.star {
+  color: #ddd;
+}
+
+ .total-reviews {
+   font-size: 0.9rem;
+   color: #666;
+   margin: 0;
+ }
 
 .write-review-btn {
   background: linear-gradient(135deg, #CDAA7D 0%, #DB2955 100%);
@@ -135,12 +144,66 @@
   border-color: #CDAA7D;
 }
 
-/* Reviews List */
-.reviews-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+ /* Reviews List */
+ .reviews-list {
+   display: flex;
+   flex-direction: column;
+   gap: 1.5rem;
+ }
+ 
+ /* No Reviews Message */
+ .no-reviews-message {
+   text-align: center;
+   padding: 3rem 1rem;
+   background: #f8f9fa;
+   border-radius: 1rem;
+   border: 2px dashed #e5e5e5;
+ }
+ 
+ .no-reviews-content {
+   max-width: 400px;
+   margin: 0 auto;
+ }
+ 
+ .no-reviews-content i {
+   font-size: 3rem;
+   color: #CDAA7D;
+   margin-bottom: 1rem;
+   display: block;
+ }
+ 
+ .no-reviews-content h3 {
+   font-size: 1.5rem;
+   color: #1D1D1F;
+   margin: 0 0 0.5rem 0;
+   font-weight: 600;
+ }
+ 
+ .no-reviews-content p {
+   color: #666;
+   margin: 0 0 1.5rem 0;
+   line-height: 1.5;
+ }
+ 
+ .write-first-review-btn {
+   background: linear-gradient(135deg, #CDAA7D 0%, #DB2955 100%);
+   color: white;
+   border: none;
+   padding: 0.75rem 1.5rem;
+   border-radius: 2rem;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   box-shadow: 0 4px 12px rgba(205, 170, 125, 0.3);
+ }
+ 
+ .write-first-review-btn:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 6px 20px rgba(205, 170, 125, 0.4);
+ }
 
 .review-item {
   background: white;
@@ -383,6 +446,20 @@
 }
 
 .star-input.filled {
+  color: #FFD700;
+}
+
+/* Font Awesome star input icons */
+.far.fa-star.star-input {
+  color: #ddd;
+}
+
+.far.fa-star.star-input:hover,
+.far.fa-star.star-input.active {
+  color: #FFD700;
+}
+
+.far.fa-star.star-input.filled {
   color: #FFD700;
 }
 
