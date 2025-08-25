@@ -34,7 +34,7 @@
     "browse-tshirt": {
       "type": "browse-tshirt",
       "settings": {
-        "spline_url": "https://unpkg.com/@splinetool/viewer@1.10.51/build/spline-viewer.js",
+        "spline_url": "https://prod.spline.design/tQj8h8WQgU4B2MnI/scene.splinecode",
         "heading": "Browse T‑Shirts",
         "subheading": "<p>Dive into our latest T‑shirt drops and explore details up close with an interactive 3D view.</p>",
         "button_label": "Explore"
