@@ -2,6 +2,7 @@
 	padding: 40px 16px;
 	background: linear-gradient(135deg, #8B4513 0%, #A0522D 25%, #D2691E 50%, #CD853F 75%, #DEB887 100%);
 	margin: 0 24px;
+	border-radius: 28px;
 }
 
 .featured-collections .fc-container {
