@@ -1,7 +1,7 @@
 .featured-collections {
 	padding: 40px 16px;
 	background: linear-gradient(135deg, #8B4513 0%, #A0522D 25%, #D2691E 50%, #CD853F 75%, #DEB887 100%);
-	margin: 0 24px;
+	margin: 0 1rem;
 	border-radius: 28px;
 }
 
@@ -54,7 +54,7 @@
 
 .featured-collections .fc-card--xl {
 	grid-row: span 2;
-	aspect-ratio: 1 / 1;
+	aspect-ratio: 3 / 4;
 }
 
 .featured-collections .fc-card--wide {
