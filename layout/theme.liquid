@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{ content_for_header }}
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,500,600,700&display=swap" rel="stylesheet">
+    {{ 'featured-footwear.css' | asset_url | stylesheet_tag }}
     <style>
       html, body {
         font-family: 'Roboto Condensed', Arial, sans-serif !important;
@@ -79,6 +80,7 @@
     {% endif %}
 
     <script src="{{ 'header.js' | asset_url }}" defer></script>
+    {{ 'featured-footwear.js' | asset_url | script_tag }}
   </body>
 </html>
 
