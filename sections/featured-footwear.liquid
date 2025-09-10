@@ -32,25 +32,47 @@
               </a>
               
               {% comment %} Color swatches {% endcomment %}
-              {% if product.variants.size > 1 %}
-                <div class="color-swatches">
+              <div class="color-swatches">
+                {% if product.variants.size > 1 %}
                   {% for variant in product.variants limit: 6 %}
-                    {% if variant.option1 contains 'Color' or variant.option1 contains 'Colour' or forloop.first %}
+                    {% assign show_variant = false %}
+                    {% if variant.option1 contains 'Color' or variant.option1 contains 'Colour' or variant.option1 contains 'color' or variant.option1 contains 'colour' %}
+                      {% assign show_variant = true %}
+                    {% elsif forloop.first %}
+                      {% assign show_variant = true %}
+                    {% endif %}
+                    
+                    {% if show_variant %}
+                      {% assign color_name = variant.option1 | default: 'Default' %}
+                      {% assign color_value = color_name | downcase | replace: ' ', '' | replace: '-', '' %}
                       <button 
                         class="color-swatch {% if forloop.first %}active{% endif %}"
                         data-variant-id="{{ variant.id }}"
                         data-image-url="{{ variant.featured_image | img_url: '400x400' | default: product.featured_image | img_url: '400x400' }}"
                         data-product-id="{{ product.id }}"
-                        style="background-color: {{ variant.option1 | downcase | replace: ' ', '' }};"
-                        title="{{ variant.option1 }}"
-                        aria-label="Select {{ variant.option1 }} color"
+                        style="background-color: {{ color_value }};"
+                        title="{{ color_name }}"
+                        aria-label="Select {{ color_name }} color"
                       >
-                        <span class="color-name">{{ variant.option1 }}</span>
+                        <span class="color-name">{{ color_name }}</span>
                       </button>
                     {% endif %}
                   {% endfor %}
-                </div>
-              {% endif %}
+                {% else %}
+                  {% comment %} Fallback for single variant products {% endcomment %}
+                  <button 
+                    class="color-swatch active"
+                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                    data-image-url="{{ product.featured_image | img_url: '400x400' }}"
+                    data-product-id="{{ product.id }}"
+                    style="background-color: #CDAA7D;"
+                    title="Default"
+                    aria-label="Select default color"
+                  >
+                    <span class="color-name">Default</span>
+                  </button>
+                {% endif %}
+              </div>
             </div>
 
             <div class="footwear-info">
