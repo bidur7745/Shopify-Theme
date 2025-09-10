@@ -1,16 +1,50 @@
 /**
- * Featured Footwear Section JavaScript
+ * Featured Footwear Section JavaScript - Fixed Version
  * Handles dynamic image swapping and color selection
  */
 
 class FeaturedFootwear {
   constructor() {
     this.init();
+    this.colorMap = this.generateColorMap();
   }
 
   init() {
     this.bindEvents();
     this.initializeColorSwatches();
+  }
+
+  generateColorMap() {
+    return {
+      'black': '#000000',
+      'white': '#FFFFFF',
+      'brown': '#8B4513',
+      'tan': '#D2B48C',
+      'navy': '#000080',
+      'red': '#DC143C',
+      'blue': '#4169E1',
+      'green': '#228B22',
+      'gray': '#808080',
+      'grey': '#808080',
+      'beige': '#F5F5DC',
+      'cream': '#FFFDD0',
+      'gold': '#FFD700',
+      'silver': '#C0C0C0',
+      'pink': '#FFC0CB',
+      'purple': '#800080',
+      'orange': '#FFA500',
+      'yellow': '#FFFF00',
+      'burgundy': '#800020',
+      'nude': '#E8B5A2',
+      'camel': '#C19A6B',
+      'olive': '#808000',
+      'khaki': '#F0E68C',
+      'maroon': '#800000',
+      'teal': '#008080',
+      'mint': '#98FB98',
+      'coral': '#FF7F50',
+      'lavender': '#E6E6FA'
+    };
   }
 
   bindEvents() {
@@ -42,19 +76,33 @@ class FeaturedFootwear {
     footwearCards.forEach(card => {
       const swatches = card.querySelectorAll('.color-swatch');
       const mainImage = card.querySelector('.footwear-main-image');
-      const form = card.querySelector('.footwear-form');
-      const variantInput = form?.querySelector('input[name="id"]');
       
       if (swatches.length > 0 && mainImage) {
-        // Set initial active state
-        this.setActiveSwatch(swatches[0]);
-        
-        // Add index for animation delay
+        // Set proper color values and initial active state
         swatches.forEach((swatch, index) => {
+          // Set animation delay
           swatch.style.setProperty('--index', index);
+          
+          // Set proper color value from color name
+          const colorName = this.getColorName(swatch);
+          const colorValue = this.getColorValue(colorName);
+          swatch.style.setProperty('--swatch-color', colorValue);
+          swatch.style.backgroundColor = colorValue;
+          
+          // Set first swatch as active
+          if (index === 0) {
+            this.setActiveSwatch(swatch);
+          }
         });
       }
     });
+  }
+
+  getColorValue(colorName) {
+    if (!colorName) return '#CDAA7D'; // Default color
+    
+    const cleanName = colorName.toLowerCase().trim().replace(/[^a-z]/g, '');
+    return this.colorMap[cleanName] || '#CDAA7D';
   }
 
   handleColorSwatchClick(e) {
@@ -72,13 +120,13 @@ class FeaturedFootwear {
     this.setActiveSwatch(swatch);
     
     // Update main image with smooth transition
-    this.updateProductImage(card, imageUrl);
+    this.updateProductImage(card, imageUrl, swatch);
     
     // Update variant in form
     this.updateVariant(card, variantId);
     
     // Update product URL if needed
-    this.updateProductUrl(card, productId, variantId);
+    this.updateProductUrl(card, variantId);
     
     // Add visual feedback
     this.addClickFeedback(swatch);
@@ -95,11 +143,19 @@ class FeaturedFootwear {
     activeSwatch.classList.add('active');
   }
 
-  updateProductImage(card, imageUrl) {
+  updateProductImage(card, imageUrl, activeSwatch) {
     const mainImage = card.querySelector('.footwear-main-image');
     const imageContainer = card.querySelector('.footwear-image-container');
     
-    if (!mainImage || !imageUrl) return;
+    if (!mainImage || !imageUrl) {
+      console.warn('Missing image element or URL');
+      return;
+    }
+
+    // Don't update if it's the same image
+    if (mainImage.src === imageUrl) {
+      return;
+    }
 
     // Create loading overlay
     const loadingOverlay = this.createLoadingOverlay();
@@ -113,9 +169,11 @@ class FeaturedFootwear {
       mainImage.style.transform = 'scale(1.1)';
       
       setTimeout(() => {
-        // Update image source
+        // Update image source and alt text
         mainImage.src = imageUrl;
-        mainImage.alt = mainImage.alt.replace(/color\s+\w+/i, '') + ' ' + this.getColorName(activeSwatch);
+        const colorName = this.getColorName(activeSwatch);
+        const baseAlt = mainImage.alt.replace(/\s+in\s+\w+/i, ''); // Remove existing color reference
+        mainImage.alt = colorName ? `${baseAlt} in ${colorName}` : baseAlt;
         
         // Fade in new image
         mainImage.style.opacity = '1';
@@ -129,6 +187,7 @@ class FeaturedFootwear {
     newImage.onerror = () => {
       console.warn('Failed to load image:', imageUrl);
       loadingOverlay.remove();
+      // Optionally show error state or fallback image
     };
     
     newImage.src = imageUrl;
@@ -155,7 +214,32 @@ class FeaturedFootwear {
       align-items: center;
       justify-content: center;
       z-index: 10;
+      border-radius: 1rem;
     `;
+    
+    const spinnerStyle = `
+      .loading-spinner .spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #CDAA7D;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    
+    // Add spinner styles if not already present
+    if (!document.querySelector('#spinner-styles')) {
+      const style = document.createElement('style');
+      style.id = 'spinner-styles';
+      style.textContent = spinnerStyle;
+      document.head.appendChild(style);
+    }
     
     return overlay;
   }
@@ -166,21 +250,28 @@ class FeaturedFootwear {
     
     if (variantInput && variantId) {
       variantInput.value = variantId;
+      console.log('Updated variant ID to:', variantId);
     }
   }
 
-  updateProductUrl(card, productId, variantId) {
+  updateProductUrl(card, variantId) {
     const productLink = card.querySelector('.footwear-image-link');
     const titleLink = card.querySelector('.footwear-title a');
     
-    if (productId && variantId) {
-      const newUrl = `/products/${productId}?variant=${variantId}`;
-      
-      if (productLink) {
-        productLink.href = newUrl;
-      }
-      if (titleLink) {
-        titleLink.href = newUrl;
+    if (variantId && (productLink || titleLink)) {
+      // Get current URL and add/update variant parameter
+      const currentUrl = productLink?.href || titleLink?.href;
+      if (currentUrl) {
+        const url = new URL(currentUrl, window.location.origin);
+        url.searchParams.set('variant', variantId);
+        const newUrl = url.pathname + url.search;
+        
+        if (productLink) {
+          productLink.href = newUrl;
+        }
+        if (titleLink) {
+          titleLink.href = newUrl;
+        }
       }
     }
   }
@@ -200,12 +291,13 @@ class FeaturedFootwear {
       transform: translate(-50%, -50%);
       animation: ripple 0.6s ease-out;
       pointer-events: none;
+      z-index: 1;
     `;
     
     swatch.style.position = 'relative';
     swatch.appendChild(ripple);
     
-    // Add CSS animation
+    // Add CSS animation if not present
     if (!document.querySelector('#ripple-animation')) {
       const style = document.createElement('style');
       style.id = 'ripple-animation';
@@ -222,7 +314,9 @@ class FeaturedFootwear {
     }
     
     setTimeout(() => {
-      ripple.remove();
+      if (ripple.parentNode) {
+        ripple.remove();
+      }
     }, 600);
   }
 
@@ -243,52 +337,65 @@ class FeaturedFootwear {
     // Submit to cart
     fetch('/cart/add.js', {
       method: 'POST',
-      body: formData
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(formData).toString()
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 422) {
-        throw new Error(data.description || 'Failed to add to cart');
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(err => Promise.reject(err));
       }
-      
+      return response.json();
+    })
+    .then(data => {
       // Success feedback
       this.showAddToCartSuccess(button);
       
       // Update cart count if element exists
       this.updateCartCount();
       
+      // Dispatch custom event for cart update
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: data }));
+      
     })
     .catch(error => {
       console.error('Add to cart error:', error);
-      this.showAddToCartError(button, error.message);
+      this.showAddToCartError(button, error.message || error.description || 'Failed to add to cart');
     })
     .finally(() => {
       // Reset button state
       setTimeout(() => {
-        button.disabled = false;
-        button.textContent = originalText;
-        button.style.opacity = '1';
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+          button.style.opacity = '1';
+        }
       }, 2000);
     });
   }
 
   showAddToCartSuccess(button) {
     const originalText = button.textContent;
+    const originalBackground = button.style.background;
+    
     button.textContent = 'Added! ✓';
     button.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
-    
-    // Add success animation
     button.style.animation = 'pulse 0.6s ease';
     
     setTimeout(() => {
-      button.textContent = originalText;
-      button.style.background = '';
-      button.style.animation = '';
+      if (button) {
+        button.textContent = originalText;
+        button.style.background = originalBackground;
+        button.style.animation = '';
+      }
     }, 2000);
   }
 
   showAddToCartError(button, errorMessage) {
     const originalText = button.textContent;
+    const originalBackground = button.style.background;
+    
     button.textContent = 'Error';
     button.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
     
@@ -296,12 +403,19 @@ class FeaturedFootwear {
     this.showTooltip(button, errorMessage, 'error');
     
     setTimeout(() => {
-      button.textContent = originalText;
-      button.style.background = '';
+      if (button) {
+        button.textContent = originalText;
+        button.style.background = originalBackground;
+      }
     }, 3000);
   }
 
   showTooltip(element, message, type = 'info') {
+    const existingTooltip = element.querySelector('.tooltip');
+    if (existingTooltip) {
+      existingTooltip.remove();
+    }
+    
     const tooltip = document.createElement('div');
     tooltip.className = `tooltip tooltip-${type}`;
     tooltip.textContent = message;
@@ -318,12 +432,15 @@ class FeaturedFootwear {
       white-space: nowrap;
       z-index: 1000;
       animation: tooltipFadeIn 0.3s ease;
+      max-width: 200px;
+      white-space: normal;
+      text-align: center;
     `;
     
     element.style.position = 'relative';
     element.appendChild(tooltip);
     
-    // Add CSS animation
+    // Add CSS animation if not present
     if (!document.querySelector('#tooltip-animation')) {
       const style = document.createElement('style');
       style.id = 'tooltip-animation';
@@ -337,23 +454,31 @@ class FeaturedFootwear {
     }
     
     setTimeout(() => {
-      tooltip.remove();
+      if (tooltip.parentNode) {
+        tooltip.remove();
+      }
     }, 3000);
   }
 
   updateCartCount() {
-    // Update cart count in header if it exists
-    const cartCountElements = document.querySelectorAll('.cart-count, .cart-count-badge');
-    cartCountElements.forEach(element => {
-      const currentCount = parseInt(element.textContent) || 0;
-      element.textContent = currentCount + 1;
-      
-      // Add animation
-      element.style.animation = 'bounce 0.6s ease';
-      setTimeout(() => {
-        element.style.animation = '';
-      }, 600);
-    });
+    // Fetch current cart to get accurate count
+    fetch('/cart.js')
+      .then(response => response.json())
+      .then(cart => {
+        const cartCountElements = document.querySelectorAll('.cart-count, .cart-count-badge, [data-cart-count]');
+        cartCountElements.forEach(element => {
+          element.textContent = cart.item_count;
+          
+          // Add animation
+          element.style.animation = 'bounce 0.6s ease';
+          setTimeout(() => {
+            element.style.animation = '';
+          }, 600);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching cart:', error);
+      });
   }
 
   handleKeyboardNavigation(e) {
@@ -378,11 +503,13 @@ class FeaturedFootwear {
       case 'Enter':
       case ' ':
         e.preventDefault();
-        swatch.click();
+        this.handleColorSwatchClick({ target: swatch, preventDefault: () => {} });
+        return;
+      default:
         return;
     }
     
-    if (newIndex !== currentIndex) {
+    if (newIndex !== currentIndex && allSwatches[newIndex]) {
       allSwatches[newIndex].focus();
       this.setActiveSwatch(allSwatches[newIndex]);
     }
@@ -390,24 +517,42 @@ class FeaturedFootwear {
 
   getColorName(swatch) {
     const colorName = swatch.querySelector('.color-name');
-    return colorName ? colorName.textContent : '';
+    return colorName ? colorName.textContent.trim() : '';
+  }
+
+  // Debug method to check data attributes
+  debugSwatches() {
+    const swatches = document.querySelectorAll('.color-swatch');
+    console.log('Color swatches debug:');
+    swatches.forEach((swatch, index) => {
+      console.log(`Swatch ${index}:`, {
+        variantId: swatch.dataset.variantId,
+        imageUrl: swatch.dataset.imageUrl,
+        productId: swatch.dataset.productId,
+        colorName: this.getColorName(swatch)
+      });
+    });
   }
 }
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    new FeaturedFootwear();
+  });
+} else {
   new FeaturedFootwear();
-});
+}
 
 // Re-initialize for dynamic content (e.g., theme editor)
 document.addEventListener('shopify:section:load', () => {
   new FeaturedFootwear();
 });
 
-// Add pulse animation for success feedback
-if (!document.querySelector('#pulse-animation')) {
+// Add required CSS animations
+if (!document.querySelector('#footwear-animations')) {
   const style = document.createElement('style');
-  style.id = 'pulse-animation';
+  style.id = 'footwear-animations';
   style.textContent = `
     @keyframes pulse {
       0% { transform: scale(1); }
