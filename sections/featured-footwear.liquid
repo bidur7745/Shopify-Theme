@@ -44,7 +44,7 @@
             {% endunless %}
           {% endfor %}
 
-          <div class="footwear-card">
+          <div class="footwear-card card-minimal">
             <div class="footwear-image-container">
               <a href="{{ product.url }}" class="footwear-image-link">
                 <img 
@@ -54,41 +54,6 @@
                   loading="lazy"
                 >
               </a>
-
-              {% comment %} Color swatches using representative variants {% endcomment %}
-              <div class="color-swatches">
-                {% assign entries = color_variants | split: '||' %}
-                {% for entry in entries %}
-                  {% unless entry == '' %}
-                    {% assign json = entry | replace: '{', '' | replace: '}', '' %}
-                    {% assign parts = json | split: ',' %}
-                    {% assign v_id = '' %}
-                    {% assign v_color = '' %}
-                    {% assign v_image = '' %}
-                    {% for p in parts %}
-                      {% if p contains '"id"' %}
-                        {% assign v_id = p | split: ':' | last | strip %}
-                      {% elsif p contains '"color"' %}
-                        {% assign v_color = p | split: ':' | last | strip | replace: '"', '' %}
-                      {% elsif p contains '"image"' %}
-                        {% assign v_image = p | split: ':' | last %}
-                        {% assign v_image = p | remove: '"image":' | strip | replace: '"', '' %}
-                      {% endif %}
-                    {% endfor %}
-                    <button 
-                      class="color-swatch {% if forloop.first %}active{% endif %} image-swatch"
-                      data-variant-id="{{ v_id }}"
-                      data-image-url="{{ v_image }}"
-                      data-product-id="{{ product.id }}"
-                      title="{{ v_color }}"
-                      aria-label="Select {{ v_color }} color"
-                      style="background-image:url({{ v_image }});"
-                    >
-                      <span class="color-name">{{ v_color }}</span>
-                    </button>
-                  {% endunless %}
-                {% endfor %}
-              </div>
             </div>
 
             <div class="footwear-info">
@@ -103,6 +68,39 @@
                 {% else %}
                   <span class="price-regular">{{ product.price | money }}</span>
                 {% endif %}
+              </div>
+
+              {% comment %} Color swatches under price (solid dots) {% endcomment %}
+              <div class="color-swatches color-swatches-inline">
+                {% assign entries = color_variants | split: '||' %}
+                {% for entry in entries %}
+                  {% unless entry == '' %}
+                    {% assign json = entry | replace: '{', '' | replace: '}', '' %}
+                    {% assign parts = json | split: ',' %}
+                    {% assign v_id = '' %}
+                    {% assign v_color = '' %}
+                    {% assign v_image = '' %}
+                    {% for p in parts %}
+                      {% if p contains '"id"' %}
+                        {% assign v_id = p | split: ':' | last | strip %}
+                      {% elsif p contains '"color"' %}
+                        {% assign v_color = p | split: ':' | last | strip | replace: '"', '' %}
+                      {% elsif p contains '"image"' %}
+                        {% assign v_image = p | remove: '"image":' | strip | replace: '"', '' %}
+                      {% endif %}
+                    {% endfor %}
+                    <button 
+                      class="color-swatch {% if forloop.first %}active{% endif %}"
+                      data-variant-id="{{ v_id }}"
+                      data-image-url="{{ v_image }}"
+                      data-product-id="{{ product.id }}"
+                      title="{{ v_color }}"
+                      aria-label="Select {{ v_color }} color"
+                    >
+                      <span class="color-name">{{ v_color }}</span>
+                    </button>
+                  {% endunless %}
+                {% endfor %}
               </div>
 
               <form action="/cart/add" method="post" enctype="multipart/form-data" class="footwear-form">
