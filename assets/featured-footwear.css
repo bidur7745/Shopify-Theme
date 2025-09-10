@@ -494,6 +494,27 @@
   outline-offset: 2px;
 }
 
+/* Empty State */
+.footwear-empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  border: 2px dashed #CDAA7D;
+}
+
+.footwear-empty-state p {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.footwear-empty-state p:first-child {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #CDAA7D;
+}
+
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   .footwear-card {
