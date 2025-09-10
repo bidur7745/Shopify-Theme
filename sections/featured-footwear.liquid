@@ -5,7 +5,7 @@
 {{ 'featured-footwear.css' | asset_url | stylesheet_tag }}
 {{ 'featured-footwear.js' | asset_url | script_tag }}
 
-<div class="featured-footwear-section">
+<div id="featured-footwear-{{ section.id }}" class="featured-footwear-section">
   <div class="container">
     {% if section.settings.heading != blank %}
       <div class="section-header">
@@ -17,9 +17,33 @@
     {% endif %}
 
     {% assign selected_collection = collections[section.settings.collection] %}
-    {% if selected_collection and selected_collection.products.size > 0 %}
+    {% if selected_collection and selected_collection.products_count > 0 %}
       <div class="footwear-grid">
         {% for product in selected_collection.products limit: section.settings.products_to_show %}
+          {% comment %} Determine which option is the Color option {% endcomment %}
+          {% assign color_option_index = nil %}
+          {% for opt in product.options_with_values %}
+            {% assign opt_name = opt.name | downcase %}
+            {% if opt_name contains 'color' or opt_name contains 'colour' %}
+              {% assign color_option_index = forloop.index0 %}
+            {% endif %}
+          {% endfor %}
+          {% if color_option_index == nil %}
+            {% assign color_option_index = 0 %}
+          {% endif %}
+
+          {% comment %} Build unique color list with a representative variant per color {% endcomment %}
+          {% assign seen_colors = '' | split: ',' %}
+          {% assign color_variants = '' %}
+          {% for v in product.variants %}
+            {% assign color_value = v.options[color_option_index] | default: 'Default' %}
+            {% unless seen_colors contains color_value %}
+              {% assign seen_colors = seen_colors | push: color_value %}
+              {% capture cv %}{"id":{{ v.id }},"color":"{{ color_value | escape }}","image":"{{ v.featured_image | img_url: '400x400' | default: product.featured_image | img_url: '400x400' }}"}{% endcapture %}
+              {% assign color_variants = color_variants | append: cv | append: '||' %}
+            {% endunless %}
+          {% endfor %}
+
           <div class="footwear-card">
             <div class="footwear-image-container">
               <a href="{{ product.url }}" class="footwear-image-link">
@@ -30,48 +54,40 @@
                   loading="lazy"
                 >
               </a>
-              
-              {% comment %} Color swatches {% endcomment %}
+
+              {% comment %} Color swatches using representative variants {% endcomment %}
               <div class="color-swatches">
-                {% if product.variants.size > 1 %}
-                  {% for variant in product.variants limit: 6 %}
-                    {% assign show_variant = false %}
-                    {% if variant.option1 contains 'Color' or variant.option1 contains 'Colour' or variant.option1 contains 'color' or variant.option1 contains 'colour' %}
-                      {% assign show_variant = true %}
-                    {% elsif forloop.first %}
-                      {% assign show_variant = true %}
-                    {% endif %}
-                    
-                    {% if show_variant %}
-                      {% assign color_name = variant.option1 | default: 'Default' %}
-                      {% assign color_value = color_name | downcase | replace: ' ', '' | replace: '-', '' %}
-                      <button 
-                        class="color-swatch {% if forloop.first %}active{% endif %}"
-                        data-variant-id="{{ variant.id }}"
-                        data-image-url="{{ variant.featured_image | img_url: '400x400' | default: product.featured_image | img_url: '400x400' }}"
-                        data-product-id="{{ product.id }}"
-                        style="background-color: {{ color_value }};"
-                        title="{{ color_name }}"
-                        aria-label="Select {{ color_name }} color"
-                      >
-                        <span class="color-name">{{ color_name }}</span>
-                      </button>
-                    {% endif %}
-                  {% endfor %}
-                {% else %}
-                  {% comment %} Fallback for single variant products {% endcomment %}
-                  <button 
-                    class="color-swatch active"
-                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
-                    data-image-url="{{ product.featured_image | img_url: '400x400' }}"
-                    data-product-id="{{ product.id }}"
-                    style="background-color: #CDAA7D;"
-                    title="Default"
-                    aria-label="Select default color"
-                  >
-                    <span class="color-name">Default</span>
-                  </button>
-                {% endif %}
+                {% assign entries = color_variants | split: '||' %}
+                {% for entry in entries %}
+                  {% unless entry == '' %}
+                    {% assign json = entry | replace: '{', '' | replace: '}', '' %}
+                    {% assign parts = json | split: ',' %}
+                    {% assign v_id = '' %}
+                    {% assign v_color = '' %}
+                    {% assign v_image = '' %}
+                    {% for p in parts %}
+                      {% if p contains '"id"' %}
+                        {% assign v_id = p | split: ':' | last | strip %}
+                      {% elsif p contains '"color"' %}
+                        {% assign v_color = p | split: ':' | last | strip | replace: '"', '' %}
+                      {% elsif p contains '"image"' %}
+                        {% assign v_image = p | split: ':' | last %}
+                        {% assign v_image = p | remove: '"image":' | strip | replace: '"', '' %}
+                      {% endif %}
+                    {% endfor %}
+                    <button 
+                      class="color-swatch {% if forloop.first %}active{% endif %} image-swatch"
+                      data-variant-id="{{ v_id }}"
+                      data-image-url="{{ v_image }}"
+                      data-product-id="{{ product.id }}"
+                      title="{{ v_color }}"
+                      aria-label="Select {{ v_color }} color"
+                      style="background-image:url({{ v_image }});"
+                    >
+                      <span class="color-name">{{ v_color }}</span>
+                    </button>
+                  {% endunless %}
+                {% endfor %}
               </div>
             </div>
 
@@ -115,8 +131,7 @@
         {% elsif selected_collection == blank %}
           <p>Collection not found. Please check the collection selection.</p>
         {% else %}
-          <p>No products found in the selected collection "{{ selected_collection.title }}".</p>
-          <p>Collection has {{ selected_collection.products.size }} products.</p>
+          <p>No products found in the selected collection.</p>
         {% endif %}
       </div>
     {% endif %}
@@ -178,34 +193,6 @@
     {
       "type": "header",
       "content": "Section Settings"
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "options": [
-        {
-          "value": "background-1",
-          "label": "Background 1"
-        },
-        {
-          "value": "background-2",
-          "label": "Background 2"
-        },
-        {
-          "value": "inverse",
-          "label": "Inverse"
-        },
-        {
-          "value": "accent-1",
-          "label": "Accent 1"
-        },
-        {
-          "value": "accent-2",
-          "label": "Accent 2"
-        }
-      ],
-      "default": "background-1",
-      "label": "Color scheme"
     },
     {
       "type": "range",
