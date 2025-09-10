@@ -2,6 +2,8 @@
   Featured Footwear Section with Color Options
   Displays footwear products from selected collection with dynamic color swatches
 {% endcomment %}
+{{ 'featured-footwear.css' | asset_url | stylesheet_tag }}
+{{ 'featured-footwear.js' | asset_url | script_tag }}
 
 <div class="featured-footwear-section">
   <div class="container">
@@ -14,10 +16,10 @@
       </div>
     {% endif %}
 
-    {% assign collection = collections[section.settings.collection] %}
-    {% if collection and collection.products.size > 0 %}
+    {% assign selected_collection = collections[section.settings.collection] %}
+    {% if selected_collection and selected_collection.products.size > 0 %}
       <div class="footwear-grid">
-        {% for product in collection.products limit: section.settings.products_to_show %}
+        {% for product in selected_collection.products limit: section.settings.products_to_show %}
           <div class="footwear-card">
             <div class="footwear-image-container">
               <a href="{{ product.url }}" class="footwear-image-link">
@@ -86,9 +88,13 @@
       </div>
     {% else %}
       <div class="footwear-empty-state">
-        <p>No products found in the selected collection.</p>
         {% if section.settings.collection == blank %}
           <p>Please select a collection in the theme customizer.</p>
+        {% elsif selected_collection == blank %}
+          <p>Collection not found. Please check the collection selection.</p>
+        {% else %}
+          <p>No products found in the selected collection "{{ selected_collection.title }}".</p>
+          <p>Collection has {{ selected_collection.products.size }} products.</p>
         {% endif %}
       </div>
     {% endif %}
