@@ -84,7 +84,7 @@
               </div>
 
               {% comment %} Color swatches under price (solid dots) {% endcomment %}
-              <div class="color-swatches color-swatches-inline">
+              <div class="color-swatches color-swatches-inline" style="display: flex !important; opacity: 1 !important; visibility: visible !important;">
                 {% comment %} Debug information {% endcomment %}
                 {% if color_variants.size == 0 %}
                   <div style="color: red; font-size: 10px;">No color variants found</div>
@@ -101,7 +101,7 @@
                         data-product-id="{{ product.id }}"
                         title="{{ color }}"
                         aria-label="Select {{ color }} color"
-                        style="background-color: {% if color == 'Black' %}#000000{% elsif color == 'White' %}#FFFFFF{% elsif color == 'Red' %}#FF0000{% elsif color == 'Blue' %}#0000FF{% elsif color == 'Green' %}#008000{% elsif color == 'Yellow' %}#FFFF00{% elsif color == 'Brown' %}#A52A2A{% elsif color == 'Orange' %}#FFA500{% elsif color == 'Purple' %}#800080{% elsif color == 'Pink' %}#FFC0CB{% elsif color == 'Gray' or color == 'Grey' %}#808080{% else %}#CDAA7D{% endif %};"
+                        style="background-color: {% if color == 'Black' %}#000000{% elsif color == 'White' %}#FFFFFF{% elsif color == 'Red' %}#FF0000{% elsif color == 'Blue' %}#0000FF{% elsif color == 'Green' %}#008000{% elsif color == 'Yellow' %}#FFFF00{% elsif color == 'Brown' %}#A52A2A{% elsif color == 'Orange' %}#FFA500{% elsif color == 'Purple' %}#800080{% elsif color == 'Pink' %}#FFC0CB{% elsif color == 'Gray' or color == 'Grey' %}#808080{% else %}#CDAA7D{% endif %}; display: block !important; opacity: 1 !important; visibility: visible !important;"
                       >
                         <span class="color-name">{{ color }}</span>
                       </button>

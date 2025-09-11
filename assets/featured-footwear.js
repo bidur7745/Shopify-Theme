@@ -93,66 +93,71 @@
     }
 
     initializeColorSwatches() {
-      console.log('Initializing color swatches');
-      const cards = this.root.querySelectorAll('.footwear-card');
-      console.log('Found ' + cards.length + ' footwear cards');
-      
-      cards.forEach(card => {
-        const swatches = card.querySelectorAll('.color-swatch');
-        const mainImage = card.querySelector('.footwear-main-image');
-        console.log('Card has ' + swatches.length + ' swatches');
-        
-        if (!swatches.length || !mainImage) {
-          console.log('No swatches or main image found for card');
-          return;
-        }
-        
-        // Make sure the container is visible
-        const swatchContainer = card.querySelector('.color-swatches-inline');
-        if (swatchContainer) {
-          swatchContainer.style.display = 'flex';
-          console.log('Made swatch container visible');
-        }
-        
-        swatches.forEach((swatch, index) => {
-          swatch.style.setProperty('--index', index);
-          
-          // Force visibility for debugging
-          swatch.style.display = 'block';
-          
-          // Get the inline style background color
-          const inlineColor = swatch.style.backgroundColor;
-          
-          // Get the style attribute value
-          const styleAttr = swatch.getAttribute('style') || '';
-          console.log('Swatch style attribute:', styleAttr);
-          
-          // Extract background-color from style attribute if it exists
-          const bgColorMatch = styleAttr.match(/background-color:\s*([^;]+)/i);
-          const inlineBgColor = bgColorMatch ? bgColorMatch[1].trim() : null;
-          console.log('Extracted inline background color:', inlineBgColor);
-          
-          // If we have an inline background color, use it
-          if (inlineBgColor && inlineBgColor !== 'transparent' && inlineBgColor !== 'rgba(0, 0, 0, 0)') {
-            console.log('Using inline background color:', inlineBgColor);
-            // Make sure it's applied as both background-color and --swatch-color
-            swatch.style.backgroundColor = inlineBgColor;
-            swatch.style.setProperty('--swatch-color', inlineBgColor);
+        console.log('Initializing color swatches');
+        const cards = this.root.querySelectorAll('.footwear-card');
+        console.log('Found ' + cards.length + ' footwear cards');
+
+        cards.forEach(card => {
+          // First, make sure the container is visible
+          const swatchContainer = card.querySelector('.color-swatches-inline');
+          if (swatchContainer) {
+            swatchContainer.style.display = 'flex';
+            swatchContainer.style.opacity = '1';
+            swatchContainer.style.visibility = 'visible';
+            swatchContainer.style.transform = 'none';
+            console.log('Made swatch container visible');
           } else {
-            // Otherwise, get the color from the title or data attributes
-            const colorName = this.getColorName(swatch);
-            const colorValue = this.getColorValue(colorName);
-            swatch.style.backgroundColor = colorValue;
-            swatch.style.setProperty('--swatch-color', colorValue);
-            console.log('Applied color ' + colorValue + ' to swatch for color: ' + colorName);
+            console.log('No swatch container found for card');
+            return;
           }
           
-          // Add click event listener
-          if (!swatch.getAttribute('data-event-bound')) {
-            swatch.addEventListener('click', (e) => this.handleColorSwatchClick(e, swatch));
-            swatch.setAttribute('data-event-bound', 'true');
-            console.log('Added click event to swatch');
+          const swatches = card.querySelectorAll('.color-swatch');
+          const mainImage = card.querySelector('.footwear-main-image');
+          console.log('Card has ' + swatches.length + ' swatches');
+          
+          if (!swatches.length || !mainImage) {
+            console.log('No swatches or main image found for card');
+            return;
           }
+          
+          swatches.forEach((swatch, index) => {
+            swatch.style.setProperty('--index', index);
+            
+            // Force visibility for debugging
+            swatch.style.display = 'block';
+            swatch.style.opacity = '1';
+            swatch.style.visibility = 'visible';
+            
+            // Get the style attribute value
+            const styleAttr = swatch.getAttribute('style') || '';
+            console.log('Swatch style attribute:', styleAttr);
+            
+            // Extract background-color from style attribute if it exists
+            const bgColorMatch = styleAttr.match(/background-color:\s*([^;]+)/i);
+            const inlineBgColor = bgColorMatch ? bgColorMatch[1].trim() : null;
+            console.log('Extracted inline background color:', inlineBgColor);
+            
+            // If we have an inline background color, use it
+            if (inlineBgColor && inlineBgColor !== 'transparent' && inlineBgColor !== 'rgba(0, 0, 0, 0)') {
+              console.log('Using inline background color:', inlineBgColor);
+              // Make sure it's applied as both background-color and --swatch-color
+              swatch.style.backgroundColor = inlineBgColor;
+              swatch.style.setProperty('--swatch-color', inlineBgColor);
+            } else {
+              // Otherwise, get the color from the title or data attributes
+              const colorName = this.getColorName(swatch);
+              const colorValue = this.getColorValue(colorName);
+              swatch.style.backgroundColor = colorValue;
+              swatch.style.setProperty('--swatch-color', colorValue);
+              console.log('Applied color ' + colorValue + ' to swatch for color: ' + colorName);
+            }
+            
+            // Add click event listener only if not already bound
+            if (!swatch.hasAttribute('data-event-bound')) {
+              swatch.addEventListener('click', (e) => this.handleColorSwatchClick(e, swatch));
+              swatch.setAttribute('data-event-bound', 'true');
+              console.log('Added click event to swatch');
+            }
         });
         
         // Only set active swatch if we have swatches
@@ -183,6 +188,22 @@
       if (dataColor) {
         console.log('Found color name from data-color: ' + dataColor);
         return dataColor;
+      }
+      
+      // Try to extract from style attribute
+      const styleAttr = swatch.getAttribute('style') || '';
+      const colorMatch = styleAttr.match(/background-color:\s*(?:#[0-9A-Fa-f]{6}|#[0-9A-Fa-f]{3}|rgb\([^)]+\)|[a-zA-Z]+)/i);
+      if (colorMatch) {
+        const colorCode = colorMatch[0].split(':')[1].trim();
+        console.log('Extracted color from style:', colorCode);
+        // Try to map this color code back to a name
+         const colorMap = this.generateColorMap();
+         for (const [name, value] of Object.entries(colorMap)) {
+          if (value.toLowerCase() === colorCode.toLowerCase()) {
+            console.log('Mapped color code to name:', name);
+            return name.charAt(0).toUpperCase() + name.slice(1);
+          }
+        }
       }
       
       console.log('No color name found, using Default');
