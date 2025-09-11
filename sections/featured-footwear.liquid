@@ -32,16 +32,29 @@
             {% assign color_option_index = 0 %}
           {% endif %}
 
-          {% comment %} Build unique color list with a representative variant per color {% endcomment %}
+          {% comment %} Build unique color list with a representative variant per color (ignoring size variants) {% endcomment %}
           {% assign seen_colors = '' | split: ',' %}
           {% assign color_variants = '' %}
+          {% assign color_to_variant_map = '' | split: ',' %}
+          
+          {% comment %} First pass: collect all unique colors {% endcomment %}
           {% for v in product.variants %}
             {% assign color_value = v.options[color_option_index] | default: 'Default' %}
             {% unless seen_colors contains color_value %}
               {% assign seen_colors = seen_colors | push: color_value %}
-              {% capture cv %}{"id":{{ v.id }},"color":"{{ color_value | escape }}","image":"{{ v.featured_image | img_url: '400x400' | default: product.featured_image | img_url: '400x400' }}"}{% endcapture %}
-              {% assign color_variants = color_variants | append: cv | append: '||' %}
             {% endunless %}
+          {% endfor %}
+          
+          {% comment %} Second pass: find first variant for each color {% endcomment %}
+          {% for color in seen_colors %}
+            {% for v in product.variants %}
+              {% assign variant_color = v.options[color_option_index] | default: 'Default' %}
+              {% if variant_color == color %}
+                {% capture cv %}{"id":{{ v.id }},"color":"{{ color | escape }}","image":"{{ v.featured_image | img_url: '400x400' | default: product.featured_image | img_url: '400x400' }}"}{% endcapture %}
+                {% assign color_variants = color_variants | append: cv | append: '||' %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
           {% endfor %}
 
           <div class="footwear-card card-minimal">
