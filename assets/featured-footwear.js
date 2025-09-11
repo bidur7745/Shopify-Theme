@@ -55,16 +55,22 @@
         
         swatches.forEach((swatch, index) => {
           swatch.style.setProperty('--index', index);
-          // If not image-backed and no inline style, apply color map
-          if (!swatch.classList.contains('image-swatch') && !swatch.style.backgroundColor) {
+          // Check if the swatch already has a background color from inline style
+          const hasInlineBackground = swatch.style.backgroundColor && swatch.style.backgroundColor !== '';
+          
+          // If no inline background, apply color from color map
+          if (!swatch.classList.contains('image-swatch') && !hasInlineBackground) {
             const colorName = this.getColorName(swatch);
             const colorValue = this.getColorValue(colorName);
             swatch.style.setProperty('--swatch-color', colorValue);
             swatch.style.backgroundColor = colorValue;
-            console.log('Applied color ' + colorValue + ' to swatch');
+            console.log('Applied color ' + colorValue + ' to swatch for color: ' + colorName);
+          } else {
+            console.log('Swatch already has background color: ' + swatch.style.backgroundColor);
           }
         });
         
+        // Only set active swatch if we have swatches
         if (swatches.length > 0) {
           this.setActiveSwatch(swatches[0]);
           console.log('Set active swatch');
@@ -75,14 +81,27 @@
     getColorName(swatch) {
       // First try to get from title attribute
       const title = swatch.getAttribute('title');
-      if (title) return title;
+      if (title) {
+        console.log('Found color name from title: ' + title);
+        return title;
+      }
       
       // Then try to get from color-name span
       const nameEl = swatch.querySelector('.color-name');
-      if (nameEl && nameEl.textContent) return nameEl.textContent.trim();
+      if (nameEl && nameEl.textContent) {
+        console.log('Found color name from span: ' + nameEl.textContent.trim());
+        return nameEl.textContent.trim();
+      }
       
-      // Fallback to data attribute
-      return swatch.getAttribute('data-color') || 'Default';
+      // Try data-color attribute
+      const dataColor = swatch.getAttribute('data-color');
+      if (dataColor) {
+        console.log('Found color name from data-color: ' + dataColor);
+        return dataColor;
+      }
+      
+      console.log('No color name found, using Default');
+      return 'Default';
     }
     
     getColorValue(name) {

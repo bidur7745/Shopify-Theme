@@ -3,7 +3,7 @@
   Displays footwear products from selected collection with dynamic color swatches
 {% endcomment %}
 {{ 'featured-footwear.css' | asset_url | stylesheet_tag }}
-{{ 'featured-footwear.js' | asset_url | script_tag }}
+{{ 'featured-footwear.js' | asset_url | script_tag: defer: true }}
 
 <div id="featured-footwear-{{ section.id }}" class="featured-footwear-section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
@@ -239,11 +239,21 @@
   document.addEventListener('DOMContentLoaded', function() {
     const section = document.getElementById('featured-footwear-{{ section.id }}');
     if (section) {
-      new FeaturedFootwear(section);
-      
-      // Debug - log color swatches
-      const swatches = section.querySelectorAll('.color-swatch');
-      console.log('Found ' + swatches.length + ' color swatches');
+      // Wait a moment to ensure the FeaturedFootwear class is loaded
+      setTimeout(function() {
+        try {
+          if (typeof FeaturedFootwear === 'function') {
+            const footwear = new FeaturedFootwear(section);
+            console.log('FeaturedFootwear initialized for section {{ section.id }}');
+            const swatches = section.querySelectorAll('.color-swatch');
+            console.log('Total color swatches found: ' + swatches.length);
+          } else {
+            console.error('FeaturedFootwear class not loaded yet');
+          }
+        } catch (e) {
+          console.error('Error initializing FeaturedFootwear:', e);
+        }
+      }, 500); // 500ms delay to ensure script is loaded
     }
   });
 </script>
