@@ -34,7 +34,7 @@
 
           {% comment %} Build unique color list with a representative variant per color (ignoring size variants) {% endcomment %}
           {% assign seen_colors = '' | split: ',' %}
-          {% assign color_variants = '' %}
+          {% assign color_variants = '' | split: ',' %}
           {% assign color_to_variant_map = '' | split: ',' %}
           
           {% comment %} First pass: collect all unique colors {% endcomment %}
@@ -51,7 +51,7 @@
               {% assign variant_color = v.options[color_option_index] | default: 'Default' %}
               {% if variant_color == color %}
                 {% capture cv %}{"id":{{ v.id }},"color":"{{ color | escape }}","image":"{{ v.featured_image | img_url: '400x400' | default: product.featured_image | img_url: '400x400' }}"}{% endcapture %}
-                {% assign color_variants = color_variants | append: cv | append: '||' %}
+                {% assign color_variants = color_variants | push: cv %}
                 {% break %}
               {% endif %}
             {% endfor %}
@@ -85,14 +85,12 @@
 
               {% comment %} Color swatches under price (solid dots) {% endcomment %}
               <div class="color-swatches color-swatches-inline">
-                {% assign entries = color_variants | split: '||' %}
-                {% for entry in entries %}
-                  {% unless entry == '' %}
-                    {% assign json = entry | replace: '{', '' | replace: '}', '' %}
-                    {% assign parts = json | split: ',' %}
-                    {% assign v_id = '' %}
-                    {% assign v_color = '' %}
-                    {% assign v_image = '' %}
+                {% for entry in color_variants %}
+                  {% assign json = entry | replace: '{', '' | replace: '}', '' %}
+                  {% assign parts = json | split: ',' %}
+                  {% assign v_id = '' %}
+                  {% assign v_color = '' %}
+                  {% assign v_image = '' %}
                     {% for p in parts %}
                       {% if p contains '"id"' %}
                         {% assign v_id = p | split: ':' | last | strip %}
@@ -112,7 +110,6 @@
                     >
                       <span class="color-name">{{ v_color }}</span>
                     </button>
-                  {% endunless %}
                 {% endfor %}
               </div>
 
