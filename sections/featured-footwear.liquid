@@ -3,7 +3,7 @@
   Displays footwear products from selected collection with dynamic color swatches
 {% endcomment %}
 {{ 'featured-footwear.css' | asset_url | stylesheet_tag }}
-{{ 'featured-footwear.js' | asset_url | script_tag: defer: true }}
+<script src="{{ 'featured-footwear.js' | asset_url }}" type="text/javascript"></script>
 
 <div id="featured-footwear-{{ section.id }}" class="featured-footwear-section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">

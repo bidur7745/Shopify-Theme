@@ -3,8 +3,9 @@
  */
 (function() {
   const INIT_ATTR = 'data-footwear-init';
-
-  class FeaturedFootwear {
+  
+  // Define FeaturedFootwear class and make it globally available
+  window.FeaturedFootwear = class {
     constructor(root) {
       this.root = root;
       this.colorMap = this.generateColorMap();
@@ -16,7 +17,60 @@
 
     generateColorMap() {
       return {
-        'black': '#000000','white': '#FFFFFF','brown': '#8B4513','tan': '#D2B48C','navy': '#000080','red': '#DC143C','blue': '#4169E1','green': '#228B22','gray': '#808080','grey': '#808080','beige': '#F5F5DC','cream': '#FFFDD0','gold': '#FFD700','silver': '#C0C0C0','pink': '#FFC0CB','purple': '#800080','orange': '#FFA500','yellow': '#FFFF00','burgundy': '#800020','nude': '#E8B5A2','camel': '#C19A6B','olive': '#808000','khaki': '#F0E68C','maroon': '#800000','teal': '#008080','mint': '#98FB98','coral': '#FF7F50','lavender': '#E6E6FA'
+        black: '#000000',
+        white: '#FFFFFF',
+        red: '#FF0000',
+        blue: '#0000FF',
+        green: '#008000',
+        yellow: '#FFFF00',
+        brown: '#A52A2A',
+        orange: '#FFA500',
+        purple: '#800080',
+        pink: '#FFC0CB',
+        gray: '#808080',
+        grey: '#808080',
+        gold: '#FFD700',
+        silver: '#C0C0C0',
+        navy: '#000080',
+        teal: '#008080',
+        olive: '#808000',
+        maroon: '#800000',
+        beige: '#F5F5DC',
+        tan: '#D2B48C',
+        khaki: '#F0E68C',
+        coral: '#FF7F50',
+        turquoise: '#40E0D0',
+        lavender: '#E6E6FA',
+        indigo: '#4B0082',
+        violet: '#EE82EE',
+        magenta: '#FF00FF',
+        cyan: '#00FFFF',
+        lime: '#00FF00',
+        ivory: '#FFFFF0',
+        salmon: '#FA8072',
+        crimson: '#DC143C',
+        plum: '#DDA0DD',
+        chocolate: '#D2691E',
+        sienna: '#A0522D',
+        camel: '#C19A6B',
+        charcoal: '#36454F',
+        // Additional colors
+        darkblue: '#00008B',
+        lightblue: '#ADD8E6',
+        darkgreen: '#006400',
+        lightgreen: '#90EE90',
+        darkred: '#8B0000',
+        lightred: '#FF6347',
+        darkgray: '#A9A9A9',
+        lightgray: '#D3D3D3',
+        darkbrown: '#5C4033',
+        lightbrown: '#D2B48C',
+        darkpurple: '#4B0082',
+        lightpurple: '#D8BFD8',
+        darkorange: '#FF8C00',
+        lightorange: '#FFDAB9',
+        // Fallback
+        default: '#CDAA7D'
       };
     }
 
@@ -53,20 +107,51 @@
           return;
         }
         
+        // Make sure the container is visible
+        const swatchContainer = card.querySelector('.color-swatches-inline');
+        if (swatchContainer) {
+          swatchContainer.style.display = 'flex';
+          console.log('Made swatch container visible');
+        }
+        
         swatches.forEach((swatch, index) => {
           swatch.style.setProperty('--index', index);
-          // Check if the swatch already has a background color from inline style
-          const hasInlineBackground = swatch.style.backgroundColor && swatch.style.backgroundColor !== '';
           
-          // If no inline background, apply color from color map
-          if (!swatch.classList.contains('image-swatch') && !hasInlineBackground) {
+          // Force visibility for debugging
+          swatch.style.display = 'block';
+          
+          // Get the inline style background color
+          const inlineColor = swatch.style.backgroundColor;
+          
+          // Get the style attribute value
+          const styleAttr = swatch.getAttribute('style') || '';
+          console.log('Swatch style attribute:', styleAttr);
+          
+          // Extract background-color from style attribute if it exists
+          const bgColorMatch = styleAttr.match(/background-color:\s*([^;]+)/i);
+          const inlineBgColor = bgColorMatch ? bgColorMatch[1].trim() : null;
+          console.log('Extracted inline background color:', inlineBgColor);
+          
+          // If we have an inline background color, use it
+          if (inlineBgColor && inlineBgColor !== 'transparent' && inlineBgColor !== 'rgba(0, 0, 0, 0)') {
+            console.log('Using inline background color:', inlineBgColor);
+            // Make sure it's applied as both background-color and --swatch-color
+            swatch.style.backgroundColor = inlineBgColor;
+            swatch.style.setProperty('--swatch-color', inlineBgColor);
+          } else {
+            // Otherwise, get the color from the title or data attributes
             const colorName = this.getColorName(swatch);
             const colorValue = this.getColorValue(colorName);
-            swatch.style.setProperty('--swatch-color', colorValue);
             swatch.style.backgroundColor = colorValue;
+            swatch.style.setProperty('--swatch-color', colorValue);
             console.log('Applied color ' + colorValue + ' to swatch for color: ' + colorName);
-          } else {
-            console.log('Swatch already has background color: ' + swatch.style.backgroundColor);
+          }
+          
+          // Add click event listener
+          if (!swatch.getAttribute('data-event-bound')) {
+            swatch.addEventListener('click', (e) => this.handleColorSwatchClick(e, swatch));
+            swatch.setAttribute('data-event-bound', 'true');
+            console.log('Added click event to swatch');
           }
         });
         
@@ -271,8 +356,29 @@
     }
 
     getColorName(swatch) {
-      const el = swatch.querySelector('.color-name');
-      return el ? el.textContent.trim() : '';
+      // First try to get from title attribute
+      const title = swatch.getAttribute('title');
+      if (title) {
+        console.log('Found color name from title: ' + title);
+        return title;
+      }
+      
+      // Then try to get from color-name span
+      const nameEl = swatch.querySelector('.color-name');
+      if (nameEl && nameEl.textContent) {
+        console.log('Found color name from span: ' + nameEl.textContent.trim());
+        return nameEl.textContent.trim();
+      }
+      
+      // Try data-color attribute
+      const dataColor = swatch.getAttribute('data-color');
+      if (dataColor) {
+        console.log('Found color name from data-color: ' + dataColor);
+        return dataColor;
+      }
+      
+      console.log('No color name found, using Default');
+      return 'Default';
     }
   }
 
