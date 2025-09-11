@@ -3,9 +3,8 @@
  */
 (function() {
   const INIT_ATTR = 'data-footwear-init';
-  
-  // Define FeaturedFootwear class and make it globally available
-  window.FeaturedFootwear = class {
+
+  class FeaturedFootwear {
     constructor(root) {
       this.root = root;
       this.colorMap = this.generateColorMap();
@@ -17,60 +16,7 @@
 
     generateColorMap() {
       return {
-        black: '#000000',
-        white: '#FFFFFF',
-        red: '#FF0000',
-        blue: '#0000FF',
-        green: '#008000',
-        yellow: '#FFFF00',
-        brown: '#A52A2A',
-        orange: '#FFA500',
-        purple: '#800080',
-        pink: '#FFC0CB',
-        gray: '#808080',
-        grey: '#808080',
-        gold: '#FFD700',
-        silver: '#C0C0C0',
-        navy: '#000080',
-        teal: '#008080',
-        olive: '#808000',
-        maroon: '#800000',
-        beige: '#F5F5DC',
-        tan: '#D2B48C',
-        khaki: '#F0E68C',
-        coral: '#FF7F50',
-        turquoise: '#40E0D0',
-        lavender: '#E6E6FA',
-        indigo: '#4B0082',
-        violet: '#EE82EE',
-        magenta: '#FF00FF',
-        cyan: '#00FFFF',
-        lime: '#00FF00',
-        ivory: '#FFFFF0',
-        salmon: '#FA8072',
-        crimson: '#DC143C',
-        plum: '#DDA0DD',
-        chocolate: '#D2691E',
-        sienna: '#A0522D',
-        camel: '#C19A6B',
-        charcoal: '#36454F',
-        // Additional colors
-        darkblue: '#00008B',
-        lightblue: '#ADD8E6',
-        darkgreen: '#006400',
-        lightgreen: '#90EE90',
-        darkred: '#8B0000',
-        lightred: '#FF6347',
-        darkgray: '#A9A9A9',
-        lightgray: '#D3D3D3',
-        darkbrown: '#5C4033',
-        lightbrown: '#D2B48C',
-        darkpurple: '#4B0082',
-        lightpurple: '#D8BFD8',
-        darkorange: '#FF8C00',
-        lightorange: '#FFDAB9',
-        // Fallback
-        default: '#CDAA7D'
+        'black': '#000000','white': '#FFFFFF','brown': '#8B4513','tan': '#D2B48C','navy': '#000080','red': '#DC143C','blue': '#4169E1','green': '#228B22','gray': '#808080','grey': '#808080','beige': '#F5F5DC','cream': '#FFFDD0','gold': '#FFD700','silver': '#C0C0C0','pink': '#FFC0CB','purple': '#800080','orange': '#FFA500','yellow': '#FFFF00','burgundy': '#800020','nude': '#E8B5A2','camel': '#C19A6B','olive': '#808000','khaki': '#F0E68C','maroon': '#800000','teal': '#008080','mint': '#98FB98','coral': '#FF7F50','lavender': '#E6E6FA'
       };
     }
 
@@ -93,123 +39,25 @@
     }
 
     initializeColorSwatches() {
-        console.log('Initializing color swatches');
-        const cards = this.root.querySelectorAll('.footwear-card');
-        console.log('Found ' + cards.length + ' footwear cards');
-
-        cards.forEach(card => {
-          // First, make sure the container is visible
-          const swatchContainer = card.querySelector('.color-swatches-inline');
-          if (swatchContainer) {
-            swatchContainer.style.display = 'flex';
-            swatchContainer.style.opacity = '1';
-            swatchContainer.style.visibility = 'visible';
-            swatchContainer.style.transform = 'none';
-            console.log('Made swatch container visible');
-          } else {
-            console.log('No swatch container found for card');
-            return;
+      const cards = this.root.querySelectorAll('.footwear-card');
+      cards.forEach(card => {
+        const swatches = card.querySelectorAll('.color-swatch');
+        const mainImage = card.querySelector('.footwear-main-image');
+        if (!swatches.length || !mainImage) return;
+        swatches.forEach((swatch, index) => {
+          swatch.style.setProperty('--index', index);
+          // If not image-backed, apply color map
+          if (!swatch.classList.contains('image-swatch')) {
+            const colorName = this.getColorName(swatch);
+            const colorValue = this.getColorValue(colorName);
+            swatch.style.setProperty('--swatch-color', colorValue);
+            swatch.style.backgroundColor = colorValue;
           }
-          
-          const swatches = card.querySelectorAll('.color-swatch');
-          const mainImage = card.querySelector('.footwear-main-image');
-          console.log('Card has ' + swatches.length + ' swatches');
-          
-          if (!swatches.length || !mainImage) {
-            console.log('No swatches or main image found for card');
-            return;
-          }
-          
-          swatches.forEach((swatch, index) => {
-            swatch.style.setProperty('--index', index);
-            
-            // Force visibility for debugging
-            swatch.style.display = 'block';
-            swatch.style.opacity = '1';
-            swatch.style.visibility = 'visible';
-            
-            // Get the style attribute value
-            const styleAttr = swatch.getAttribute('style') || '';
-            console.log('Swatch style attribute:', styleAttr);
-            
-            // Extract background-color from style attribute if it exists
-            const bgColorMatch = styleAttr.match(/background-color:\s*([^;]+)/i);
-            const inlineBgColor = bgColorMatch ? bgColorMatch[1].trim() : null;
-            console.log('Extracted inline background color:', inlineBgColor);
-            
-            // If we have an inline background color, use it
-            if (inlineBgColor && inlineBgColor !== 'transparent' && inlineBgColor !== 'rgba(0, 0, 0, 0)') {
-              console.log('Using inline background color:', inlineBgColor);
-              // Make sure it's applied as both background-color and --swatch-color
-              swatch.style.backgroundColor = inlineBgColor;
-              swatch.style.setProperty('--swatch-color', inlineBgColor);
-            } else {
-              // Otherwise, get the color from the title or data attributes
-              const colorName = this.getColorName(swatch);
-              const colorValue = this.getColorValue(colorName);
-              swatch.style.backgroundColor = colorValue;
-              swatch.style.setProperty('--swatch-color', colorValue);
-              console.log('Applied color ' + colorValue + ' to swatch for color: ' + colorName);
-            }
-            
-            // Add click event listener only if not already bound
-            if (!swatch.hasAttribute('data-event-bound')) {
-              swatch.addEventListener('click', (e) => this.handleColorSwatchClick(e, swatch));
-              swatch.setAttribute('data-event-bound', 'true');
-              console.log('Added click event to swatch');
-            }
         });
-        
-        // Only set active swatch if we have swatches
-        if (swatches.length > 0) {
-          this.setActiveSwatch(swatches[0]);
-          console.log('Set active swatch');
-        }
+        this.setActiveSwatch(swatches[0]);
       });
     }
 
-    getColorName(swatch) {
-      // First try to get from title attribute
-      const title = swatch.getAttribute('title');
-      if (title) {
-        console.log('Found color name from title: ' + title);
-        return title;
-      }
-      
-      // Then try to get from color-name span
-      const nameEl = swatch.querySelector('.color-name');
-      if (nameEl && nameEl.textContent) {
-        console.log('Found color name from span: ' + nameEl.textContent.trim());
-        return nameEl.textContent.trim();
-      }
-      
-      // Try data-color attribute
-      const dataColor = swatch.getAttribute('data-color');
-      if (dataColor) {
-        console.log('Found color name from data-color: ' + dataColor);
-        return dataColor;
-      }
-      
-      // Try to extract from style attribute
-      const styleAttr = swatch.getAttribute('style') || '';
-      const colorMatch = styleAttr.match(/background-color:\s*(?:#[0-9A-Fa-f]{6}|#[0-9A-Fa-f]{3}|rgb\([^)]+\)|[a-zA-Z]+)/i);
-      if (colorMatch) {
-        const colorCode = colorMatch[0].split(':')[1].trim();
-        console.log('Extracted color from style:', colorCode);
-        // Try to map this color code back to a name
-         const colorMap = this.generateColorMap();
-         for (const [name, value] of Object.entries(colorMap)) {
-          if (value.toLowerCase() === colorCode.toLowerCase()) {
-            console.log('Mapped color code to name:', name);
-            return name.charAt(0).toUpperCase() + name.slice(1);
-          }
-        }
-      }
-      
-      console.log('No color name found, using Default');
-      return 'Default';
-    }
-    
     getColorValue(name) {
       if (!name) return '#CDAA7D';
       const key = name.toLowerCase().trim().replace(/[^a-z]/g, '');
@@ -377,29 +225,8 @@
     }
 
     getColorName(swatch) {
-      // First try to get from title attribute
-      const title = swatch.getAttribute('title');
-      if (title) {
-        console.log('Found color name from title: ' + title);
-        return title;
-      }
-      
-      // Then try to get from color-name span
-      const nameEl = swatch.querySelector('.color-name');
-      if (nameEl && nameEl.textContent) {
-        console.log('Found color name from span: ' + nameEl.textContent.trim());
-        return nameEl.textContent.trim();
-      }
-      
-      // Try data-color attribute
-      const dataColor = swatch.getAttribute('data-color');
-      if (dataColor) {
-        console.log('Found color name from data-color: ' + dataColor);
-        return dataColor;
-      }
-      
-      console.log('No color name found, using Default');
-      return 'Default';
+      const el = swatch.querySelector('.color-name');
+      return el ? el.textContent.trim() : '';
     }
   }
 
