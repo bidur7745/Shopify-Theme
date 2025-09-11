@@ -98,7 +98,13 @@
         mainImage.style.opacity = '0';
         mainImage.style.transform = 'scale(1.05)';
         setTimeout(() => {
-          mainImage.src = imageUrl;
+          // Ensure we're setting the full URL to the image
+          // If imageUrl is a relative path, convert it to absolute
+          if (imageUrl.startsWith('/')) {
+            mainImage.src = window.location.origin + imageUrl;
+          } else {
+            mainImage.src = imageUrl;
+          }
           const colorName = this.getColorName(activeSwatch);
           if (colorName) mainImage.alt = `${mainImage.alt.replace(/\s+in\s+.+$/i, '')} in ${colorName}`;
           mainImage.style.opacity = '1';
@@ -107,7 +113,12 @@
         }, 150);
       };
       preload.onerror = () => overlay.remove();
-      preload.src = imageUrl;
+      // Ensure we're preloading with the full URL
+      if (imageUrl.startsWith('/')) {
+        preload.src = window.location.origin + imageUrl;
+      } else {
+        preload.src = imageUrl;
+      }
     }
 
     createLoadingOverlay() {
