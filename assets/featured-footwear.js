@@ -39,25 +39,52 @@
     }
 
     initializeColorSwatches() {
+      console.log('Initializing color swatches');
       const cards = this.root.querySelectorAll('.footwear-card');
+      console.log('Found ' + cards.length + ' footwear cards');
+      
       cards.forEach(card => {
         const swatches = card.querySelectorAll('.color-swatch');
         const mainImage = card.querySelector('.footwear-main-image');
-        if (!swatches.length || !mainImage) return;
+        console.log('Card has ' + swatches.length + ' swatches');
+        
+        if (!swatches.length || !mainImage) {
+          console.log('No swatches or main image found for card');
+          return;
+        }
+        
         swatches.forEach((swatch, index) => {
           swatch.style.setProperty('--index', index);
-          // If not image-backed, apply color map
-          if (!swatch.classList.contains('image-swatch')) {
+          // If not image-backed and no inline style, apply color map
+          if (!swatch.classList.contains('image-swatch') && !swatch.style.backgroundColor) {
             const colorName = this.getColorName(swatch);
             const colorValue = this.getColorValue(colorName);
             swatch.style.setProperty('--swatch-color', colorValue);
             swatch.style.backgroundColor = colorValue;
+            console.log('Applied color ' + colorValue + ' to swatch');
           }
         });
-        this.setActiveSwatch(swatches[0]);
+        
+        if (swatches.length > 0) {
+          this.setActiveSwatch(swatches[0]);
+          console.log('Set active swatch');
+        }
       });
     }
 
+    getColorName(swatch) {
+      // First try to get from title attribute
+      const title = swatch.getAttribute('title');
+      if (title) return title;
+      
+      // Then try to get from color-name span
+      const nameEl = swatch.querySelector('.color-name');
+      if (nameEl && nameEl.textContent) return nameEl.textContent.trim();
+      
+      // Fallback to data attribute
+      return swatch.getAttribute('data-color') || 'Default';
+    }
+    
     getColorValue(name) {
       if (!name) return '#CDAA7D';
       const key = name.toLowerCase().trim().replace(/[^a-z]/g, '');

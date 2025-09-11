@@ -572,8 +572,8 @@
 .card-minimal .footwear-add-to-cart { margin-top: .75rem; }
 
 /* Inline small color dots under price */
-.color-swatches-inline { position: static; background: transparent; box-shadow: none; padding: 0; gap: .5rem; justify-content: flex-start; }
-.color-swatches-inline .color-swatch { width: 16px; height: 16px; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.15); }
+.color-swatches-inline { position: static; background: transparent; box-shadow: none; padding: 0; gap: .5rem; justify-content: flex-start; display: flex; }
+.color-swatches-inline .color-swatch { width: 20px; height: 20px; border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.15); border-radius: 50%; cursor: pointer; position: relative; }
 .color-swatches-inline .color-swatch.active { box-shadow: 0 0 0 2px #CDAA7D; transform: none; }
 .color-swatches-inline .color-name { display: none; }
 
