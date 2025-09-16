@@ -11,31 +11,57 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "brand_name": "GoldTree Fashion",
+        "show_announcement": true,
+        "announcement_text": "🚚 FREE SHIPPING ON ORDERS OVER $50! 🎁"
+      }
     },
     "hero-banner": {
       "type": "hero-banner",
-      "settings": {}
+      "settings": {
+        "title": "Elegance<br>Redefined",
+        "subtitle": "Luxury Fashion",
+        "description": "Discover our exclusive collection where timeless sophistication meets contemporary design. Crafted for those who appreciate the finer details in fashion.",
+        "cta_label": "Shop Collection",
+        "cta_link": "shopify://collections/all",
+        "image1_alt": "Look 1",
+        "image2_alt": "Look 2",
+        "image3_alt": "Look 3",
+        "image4_alt": "Look 4"
+      }
+    },
+    "browse-tshirt": {
+      "type": "browse-tshirt",
+      "settings": {
+        "spline_url": "",
+        "heading": "Browse T‑Shirts",
+        "subheading": "<p>Dive into our latest T‑shirt drops and explore details up close with an interactive 3D view.</p>",
+        "button_label": "Explore"
+      }
+    },
+    "featured-collections": {
+      "type": "featured-collections",
+      "settings": {
+        "heading": "Content Heading",
+        "subheading": "<p>Browse through our handpicked selections tailored to fit every style, time, and vibe. Whether you're seeking a rising standout, we've got something for everyone.</p>",
+        "collection": "featured-collection"
+      }
+    },
+    "offer": {
+      "type": "offer",
+      "settings": {
+        "button_text": "View Offer",
+        "button_link": "/collections/sale"
+      }
     },
     "featured-footwear": {
       "type": "featured-footwear",
       "settings": {
         "heading": "Featured Footwear",
         "subheading": "<p>Discover our latest collection of premium footwear with multiple color options</p>",
-        "collection": ""
+        "collection": "featured-footwear"
       }
-    },
-    "browse-tshirt": {
-      "type": "browse-tshirt",
-      "settings": {}
-    },
-    "featured-collections": {
-      "type": "featured-collections",
-      "settings": {}
-    },
-    "offer": {
-      "type": "offer",
-      "settings": {}
     },
     "newsletter": {
       "type": "newsletter",
@@ -49,39 +75,52 @@
     "testimonials": {
       "type": "testimonials-parallax",
       "blocks": {
-        "testimonial-1": {
+        "testimonial_NWa7JU": {
           "type": "testimonial",
           "settings": {
-            "quote": "<p>I absolutely love my new outfit from GoldTree Fashion! The quality is exceptional and the fit is perfect. I've received so many compliments!</p>",
-            "author_name": "Sarah Johnson",
-            "author_title": "Loyal Customer"
+            "quote": "<p><br/>Shopping here was so smooth and easy! The site feels modern, and checkout was quick. I’ll definitely be back for more<br/><br/></p>",
+            "author_name": "Bidur Siwakoti",
+            "author_title": "Happy Customer",
+            "author_image": "shopify://shop_images/3_cdeaa43e-6384-48b2-8845-b113254b8504.png"
           }
         },
-        "testimonial-2": {
+        "testimonial_wzygWz": {
           "type": "testimonial",
           "settings": {
-            "quote": "<p>The customer service at GoldTree Fashion is outstanding. They went above and beyond to help me find the perfect size. Highly recommend!</p>",
-            "author_name": "Michael Chen",
-            "author_title": "Fashion Enthusiast"
+            "quote": "<p><br/>Shopping here was so smooth and easy! The site feels modern, and checkout was quick. I’ll definitely be back for more<br/><br/></p>",
+            "author_name": "Abishek Siwakoti",
+            "author_title": "Happy Customer",
+            "author_image": "shopify://shop_images/Untitled_design_7.png"
           }
         },
-        "testimonial-3": {
+        "testimonial_AgJYpV": {
           "type": "testimonial",
           "settings": {
-            "quote": "<p>Fast shipping, beautiful packaging, and the products are even better in person than online. GoldTree Fashion has become my go-to for stylish essentials.</p>",
-            "author_name": "Emma Rodriguez",
-            "author_title": "Style Blogger"
+            "quote": "<p><br/>Shopping here was so smooth and easy! The site feels modern, and checkout was quick. I’ll definitely be back for more<br/><br/></p>",
+            "author_name": "David Basnet",
+            "author_title": "Happy Customer",
+            "author_image": "shopify://shop_images/9.png"
           }
         }
       },
+      "block_order": [
+        "testimonial_NWa7JU",
+        "testimonial_wzygWz",
+        "testimonial_AgJYpV"
+      ],
       "settings": {
         "title": "What Our Customers Say",
-        "subtitle": "Hear from our satisfied customers about their experience with GoldTree Fashion"
+        "subtitle": "Hear from our satisfied customers about their experience with GoldTree Fashion",
+        "background_image": "shopify://shop_images/15.png"
       }
     },
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "brand_name": "GoldTree Fashion",
+        "tagline": "Let Your Aura Flow Freely",
+        "description": "Designed for movement, made with intention. GoldTree Fashion brings harmony between comfort and confidence."
+      }
     }
   },
   "order": [
